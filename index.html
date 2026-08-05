@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer Intervalle Course</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-orange: #f97316;
+      --accent-red: #ef4444;
+      --accent-purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    header {
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"], input[type="number"], select {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 0.5rem;
+      color: var(--text-main);
+      padding: 0.75rem;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .btn {
+      background-color: var(--accent-blue);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background-color: #334155;
+      color: var(--text-main);
+    }
+
+    .btn-danger {
+      background-color: #451a1a;
+      color: #f87171;
+      border: 1px solid #7f1d1d;
+    }
+
+    .btn-success {
+      background-color: var(--accent-green);
+      color: #000;
+    }
+
+    .btn-warning {
+      background-color: var(--accent-orange);
+      color: #000;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .interval-input-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .interval-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      padding-right: 0.25rem;
+    }
+
+    .interval-item {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .interval-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .type-badge {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .badge-warmup { background-color: var(--accent-purple); }
+    .badge-work { background-color: var(--accent-green); }
+    .badge-rest { background-color: var(--accent-orange); }
+    .badge-cooldown { background-color: var(--accent-blue); }
+
+    .interval-item .remove-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 0 0.5rem;
+    }
+
+    .preset-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .preset-item {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .preset-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .preset-details {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* VUE RUNNER ACTIVE */
+    .runner-container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80vh;
+    }
+
+    .runner-header {
+      width: 100%;
+    }
+
+    .runner-title {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    .step-counter {
+      font-size: 0.9rem;
+      color: var(--accent-blue);
+      margin-top: 0.25rem;
+    }
+
+    .timer-display {
+      font-size: 6rem;
+      font-weight: 800;
+      font-family: monospace;
+      line-height: 1;
+      margin: 1.5rem 0;
+    }
+
+    .current-step-name {
+      font-size: 2.25rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .next-step-preview {
+      font-size: 1rem;
+      color: var(--text-muted);
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+    }
+
+    .runner-controls {
+      width: 100%;
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .runner-controls .btn {
+      flex: 1;
+      padding: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 1rem;
+      font-style: italic;
+    }
+
+    /* Color themes for workout states */
+    body.state-warmup { background-color: #1e1b4b; }
+    body.state-work { background-color: #064e3b; }
+    body.state-rest { background-color: #7c2d12; }
+    body.state-cooldown { background-color: #0c4a6e; }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="app-container">
+    <header id="main-header">
+      <h1>⚡ Running Timer</h1>
+    </header>
+
+    <!-- 1. VUE DE LISTE DES SÉANCES -->
+    <main id="view-list" class="view">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.2rem;">Mes Séances</h2>
+          <button class="btn" id="btn-open-create">+ Nouvelle séance</button>
+        </div>
+
+        <div id="workout-list" class="preset-list">
+          <!-- Injecté dynamiquement -->
+        </div>
+      </div>
+    </main>
+
+    <!-- 2. VUE DE CRÉATION DE SÉANCE -->
+    <main id="view-create" class="view hidden">
+      <div class="card">
+        <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Créer une séance</h2>
+        
+        <div class="form-group">
+          <label for="workout-name">Nom de la séance</label>
+          <input type="text" id="workout-name" placeholder="ex: 30/30 VMA ou Fractional 10min">
+        </div>
+
+        <div class="form-group">
+          <label>Ajouter un intervalle</label>
+          <div class="interval-input-grid">
+            <select id="interval-type">
+              <option value="warmup">Échauffement</option>
+              <option value="work" selected>Effort (Sprint / VMA)</option>
+              <option value="rest">Repos</option>
+              <option value="cooldown">Retour au calme</option>
+            </select>
+            <input type="number" id="interval-duration" placeholder="Durée" min="1" value="30">
+            <select id="interval-unit">
+              <option value="sec">Sec</option>
+              <option value="min">Min</option>
+            </select>
+          </div>
+          <button class="btn btn-secondary" id="btn-add-interval" style="margin-top: 0.5rem;">+ Ajouter l'intervalle</button>
+        </div>
+
+        <!-- Générateur rapide de répétitions -->
+        <div class="form-group" style="background: rgba(255,255,255,0.03); padding: 0.75rem; border-radius: 0.5rem;">
+          <label style="font-size: 0.75rem;">Générateur rapide de blocs (Répétitions)</label>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
+            <input type="number" id="repeat-count" placeholder="Fois" value="10" style="width: 70px;">
+            <span style="align-self: center; font-size: 0.8rem;">x ( Effort + Repos actuel )</span>
+            <button class="btn btn-secondary" id="btn-add-block" style="font-size: 0.8rem; padding: 0.4rem 0.6rem;">Multiplier</button>
+          </div>
+        </div>
+
+        <label>Séquence de la séance</label>
+        <div id="created-intervals-list" class="interval-list">
+          <!-- Injecté dynamiquement -->
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="btn-cancel-create" style="flex:1;">Annuler</button>
+          <button class="btn btn-success" id="btn-save-workout" style="flex:2;">Enregistrer la séance</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. VUE RUNNER / LECTEUR DE SÉANCE -->
+    <main id="view-runner" class="view hidden">
+      <div class="runner-container">
+        <div class="runner-header">
+          <div class="runner-title" id="runner-workout-title">Nom de la séance</div>
+          <div class="step-counter" id="runner-step-counter">Intervalle 1 / 8</div>
+        </div>
+
+        <div>
+          <div class="current-step-name" id="runner-step-name">Échauffement</div>
+          <div class="timer-display" id="runner-timer">00:00</div>
+          <div class="next-step-preview" id="runner-next-step">Suivant: Sprint (30s)</div>
+        </div>
+
+        <div class="runner-controls">
+          <button class="btn btn-secondary" id="btn-stop-runner">Quitter</button>
+          <button class="btn btn-warning" id="btn-pause-runner">Pause</button>
+          <button class="btn btn-success hidden" id="btn-resume-runner">Reprendre</button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    // === ÉTAT DE L'APPLICATION ===
+    let workouts = JSON.parse(localStorage.getItem('running_workouts')) || [
+      {
+        id: 'default-1',
+        name: 'Séance 30/30 classique',
+        intervals: [
+          { type: 'warmup', duration: 600, label: 'Échauffement' },
+          { type: 'work', duration: 30, label: 'Sprint' },
+          { type: 'rest', duration: 30, label: 'Repos' },
+          { type: 'work', duration: 30, label: 'Sprint' },
+          { type: 'rest', duration: 30, label: 'Repos' },
+          { type: 'work', duration: 30, label: 'Sprint' },
+          { type: 'rest', duration: 30, label: 'Repos' },
+          { type: 'cooldown', duration: 300, label: 'Retour au calme' }
+        ]
+      }
+    ];
+
+    let currentBuildingIntervals = [];
+    let activeWorkout = null;
+    let currentStepIndex = 0;
+    let timeRemaining = 0;
+    let timerInterval = null;
+    let isPaused = false;
+    let wakeLock = null;
+
+    // === AUDIO ENGINE (Web Audio API) ===
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playBeep(frequency = 800, duration = 150, type = 'sine') {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration / 1000));
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + (duration / 1000));
+      } catch (e) {
+        console.error("Audio error:", e);
+      }
+    }
+
+    function playCountdownBeep() {
+      playBeep(600, 150);
+    }
+
+    function playTransitionBeep() {
+      playBeep(1200, 200);
+      setTimeout(() => playBeep(1600, 300), 200);
+    }
+
+    // === GESTION DE VUE ===
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+      document.getElementById(viewId).classList.remove('hidden');
+
+      const header = document.getElementById('main-header');
+      if (viewId === 'view-runner') {
+        header.classList.add('hidden');
+      } else {
+        header.classList.remove('hidden');
+        document.body.className = '';
+      }
+    }
+
+    // === WAKE LOCK ===
+    async function requestWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+        }
+      } catch (err) {
+        console.warn("Wake Lock non activé:", err);
+      }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLock) {
+        wakeLock.release();
+        wakeLock = null;
+      }
+    }
+
+    // === VUE 1 : LISTE DES SÉANCES ===
+    function renderWorkoutList() {
+      const container = document.getElementById('workout-list');
+      container.innerHTML = '';
+
+      if (workouts.length === 0) {
+        container.innerHTML = '<div class="empty-msg">Aucune séance enregistrée. Créez-en une !</div>';
+        return;
+      }
+
+      workouts.forEach((w) => {
+        const totalDuration = w.intervals.reduce((acc, curr) => acc + curr.duration, 0);
+        const mins = Math.floor(totalDuration / 60);
+        const secs = totalDuration % 60;
+        const durationStr = `${mins}m ${secs > 0 ? secs + 's' : ''}`;
+
+        const item = document.createElement('div');
+        item.className = 'preset-item';
+        item.innerHTML = `
+          <div>
+            <div class="preset-title">${w.name}</div>
+            <div class="preset-details">${w.intervals.length} étapes • Durée totale: ${durationStr}</div>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-danger" onclick="deleteWorkout('${w.id}')" style="padding:0.5rem 0.75rem;">🗑️</button>
+            <button class="btn btn-success" onclick="startWorkout('${w.id}')">Démarrer</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function deleteWorkout(id) {
+      if (confirm('Voulez-vous supprimer cette séance ?')) {
+        workouts = workouts.filter(w => w.id !== id);
+        saveWorkoutsToStorage();
+        renderWorkoutList();
+      }
+    }
+
+    function saveWorkoutsToStorage() {
+      localStorage.setItem('running_workouts', JSON.stringify(workouts));
+    }
+
+    // === VUE 2 : CRÉATION DE SÉANCE ===
+    document.getElementById('btn-open-create').addEventListener('click', () => {
+      currentBuildingIntervals = [];
+      document.getElementById('workout-name').value = '';
+      renderBuildingIntervals();
+      showView('view-create');
+    });
+
+    document.getElementById('btn-cancel-create').addEventListener('click', () => {
+      showView('view-list');
+    });
+
+    const labelMap = {
+      warmup: 'Échauffement',
+      work: 'Effort',
+      rest: 'Repos',
+      cooldown: 'Retour au calme'
+    };
+
+    document.getElementById('btn-add-interval').addEventListener('click', () => {
+      const type = document.getElementById('interval-type').value;
+      const durationVal = parseInt(document.getElementById('interval-duration').value) || 0;
+      const unit = document.getElementById('interval-unit').value;
+
+      if (durationVal <= 0) return;
+
+      const durationSec = unit === 'min' ? durationVal * 60 : durationVal;
+
+      currentBuildingIntervals.push({
+        type: type,
+        duration: durationSec,
+        label: labelMap[type]
+      });
+
+      renderBuildingIntervals();
+    });
+
+    document.getElementById('btn-add-block').addEventListener('click', () => {
+      const count = parseInt(document.getElementById('repeat-count').value) || 1;
+      const workDur = parseInt(document.getElementById('interval-duration').value) || 30;
+      const unit = document.getElementById('interval-unit').value;
+      const durationSec = unit === 'min' ? workDur * 60 : workDur;
+
+      for (let i = 0; i < count; i++) {
+        currentBuildingIntervals.push({ type: 'work', duration: durationSec, label: 'Effort' });
+        currentBuildingIntervals.push({ type: 'rest', duration: durationSec, label: 'Repos' });
+      }
+      renderBuildingIntervals();
+    });
+
+    function renderBuildingIntervals() {
+      const list = document.getElementById('created-intervals-list');
+      list.innerHTML = '';
+
+      if (currentBuildingIntervals.length === 0) {
+        list.innerHTML = '<div class="empty-msg">Ajoutez au moins un intervalle.</div>';
+        return;
+      }
+
+      currentBuildingIntervals.forEach((item, index) => {
+        const mins = Math.floor(item.duration / 60);
+        const secs = item.duration % 60;
+        const timeStr = mins > 0 ? `${mins}m ${secs > 0 ? secs + 's' : ''}` : `${secs}s`;
+
+        const el = document.createElement('div');
+        el.className = 'interval-item';
+        el.innerHTML = `
+          <div class="interval-info">
+            <span class="type-badge badge-${item.type}"></span>
+            <span><strong>${item.label}</strong> (${timeStr})</span>
+          </div>
+          <button class="remove-btn" onclick="removeBuildingInterval(${index})">✕</button>
+        `;
+        list.appendChild(el);
+      });
+    }
+
+    function removeBuildingInterval(index) {
+      currentBuildingIntervals.splice(index, 1);
+      renderBuildingIntervals();
+    }
+
+    document.getElementById('btn-save-workout').addEventListener('click', () => {
+      const name = document.getElementById('workout-name').value.trim() || 'Séance sans nom';
+      if (currentBuildingIntervals.length === 0) {
+        alert('Veuillez ajouter au moins un intervalle à la séance.');
+        return;
+      }
+
+      const newWorkout = {
+        id: 'w-' + Date.now(),
+        name: name,
+        intervals: [...currentBuildingIntervals]
+      };
+
+      workouts.push(newWorkout);
+      saveWorkoutsToStorage();
+      renderWorkoutList();
+      showView('view-list');
+    });
+
+    // === VUE 3 : EXÉCUTION DE LA SÉANCE ===
+    function startWorkout(id) {
+      activeWorkout = workouts.find(w => w.id === id);
+      if (!activeWorkout || activeWorkout.intervals.length === 0) return;
+
+      initAudio();
+      requestWakeLock();
+
+      currentStepIndex = 0;
+      isPaused = false;
+      showView('view-runner');
+      loadStep(currentStepIndex);
+
+      document.getElementById('btn-pause-runner').classList.remove('hidden');
+      document.getElementById('btn-resume-runner').classList.add('hidden');
+
+      startTimer();
+    }
+
+    function loadStep(index) {
+      if (index >= activeWorkout.intervals.length) {
+        finishWorkout();
+        return;
+      }
+
+      const step = activeWorkout.intervals[index];
+      timeRemaining = step.duration;
+
+      document.getElementById('runner-workout-title').innerText = activeWorkout.name;
+      document.getElementById('runner-step-counter').innerText = `Étape ${index + 1} / ${activeWorkout.intervals.length}`;
+      document.getElementById('runner-step-name').innerText = step.label;
+      
+      document.body.className = `state-${step.type}`;
+
+      const nextStep = activeWorkout.intervals[index + 1];
+      if (nextStep) {
+        const nMins = Math.floor(nextStep.duration / 60);
+        const nSecs = nextStep.duration % 60;
+        const nTimeStr = nMins > 0 ? `${nMins}m ${nSecs > 0 ? nSecs + 's' : ''}` : `${nSecs}s`;
+        document.getElementById('runner-next-step').innerText = `Suivant : ${nextStep.label} (${nTimeStr})`;
+      } else {
+        document.getElementById('runner-next-step').innerText = 'Dernière étape !';
+      }
+
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      document.getElementById('runner-timer').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isPaused) return;
+
+        timeRemaining--;
+
+        if (timeRemaining > 0 && timeRemaining <= 3) {
+          playCountdownBeep();
+        }
+
+        if (timeRemaining < 0) {
+          playTransitionBeep();
+          currentStepIndex++;
+          loadStep(currentStepIndex);
+        } else {
+          updateTimerDisplay();
+        }
+      }, 1000);
+    }
+
+    function finishWorkout() {
+      clearInterval(timerInterval);
+      releaseWakeLock();
+      alert('Bravo ! Séance terminée avec succès ! 🎉');
+      showView('view-list');
+    }
+
+    document.getElementById('btn-pause-runner').addEventListener('click', () => {
+      isPaused = true;
+      document.getElementById('btn-pause-runner').classList.add('hidden');
+      document.getElementById('btn-resume-runner').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-resume-runner').addEventListener('click', () => {
+      isPaused = false;
+      document.getElementById('btn-resume-runner').classList.add('hidden');
+      document.getElementById('btn-pause-runner').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-stop-runner').addEventListener('click', () => {
+      if (confirm('Voulez-vous vraiment quitter la séance en cours ?')) {
+        clearInterval(timerInterval);
+        releaseWakeLock();
+        showView('view-list');
+      }
+    });
+
+    renderWorkoutList();
+  </script>
+</body>
+</html>
