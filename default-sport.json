@@ -1,0 +1,1120 @@
+{
+  "sessions": [
+    {
+      "id": "session_1788249215760_bz5r",
+      "category": "course",
+      "title": "PREPA - COURSE 1",
+      "blocks": [
+        {
+          "type": "echauffement",
+          "val": 10,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        }
+      ]
+    },
+    {
+      "id": "session_1788249215760_xj8m",
+      "category": "renfo",
+      "title": "PREPA - RENFO 1",
+      "format": "circuit",
+      "params": {
+        "series": 3,
+        "work_sec": 30,
+        "rest_sec": 30
+      },
+      "exercises": [
+        "Pompe",
+        "Squat",
+        "Abdos torsion",
+        "Dips",
+        "Fentes croisées",
+        "Gainage droit",
+        "Montain climber",
+        "Chaise",
+        "Superman",
+        "Sit up"
+      ]
+    },
+    {
+      "id": "session_1788249215760_jibg",
+      "category": "course",
+      "title": "PREPA - COURSE 2",
+      "blocks": [
+        {
+          "type": "echauffement",
+          "val": 10,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 30,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 30,
+          "unit": "sec"
+        }
+      ]
+    },
+    {
+      "id": "session_1788249215760_l9vm",
+      "category": "renfo",
+      "title": "PREPA - RENFO 2",
+      "format": "tabata",
+      "params": {
+        "count": 3,
+        "duration_min": 4,
+        "work_sec": 20,
+        "rest_sec": 10
+      },
+      "exercises": [
+        "Dips",
+        "Squat jump",
+        "Montain climber",
+        "Crunch",
+        "Chaise",
+        "Gainage droit"
+      ],
+      "tabataBlocks": [
+        {
+          "ex1": "Dips",
+          "ex2": "Squat jump"
+        },
+        {
+          "ex1": "Montain climber",
+          "ex2": "Crunch"
+        },
+        {
+          "ex1": "Chaise",
+          "ex2": "Gainage droit"
+        }
+      ]
+    },
+    {
+      "id": "session_1788249215760_jeyw",
+      "category": "course",
+      "title": "PREPA - COURSE 3",
+      "blocks": [
+        {
+          "type": "echauffement",
+          "val": 10,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "ralenti",
+          "val": 15,
+          "unit": "sec"
+        },
+        {
+          "type": "vma",
+          "val": 15,
+          "unit": "sec"
+        }
+      ]
+    },
+    {
+      "id": "session_1788249215760_20fz",
+      "category": "renfo",
+      "title": "PREPA - RENFO 3",
+      "format": "emom",
+      "params": {
+        "duration_min": 10,
+        "target_reps": 12,
+        "count": 2
+      },
+      "exercises": [],
+      "emomBlocks": [
+        [
+          {
+            "ex": "Chaise",
+            "reps": 15
+          },
+          {
+            "ex": "Sit up",
+            "reps": 15
+          },
+          {
+            "ex": "Pompe",
+            "reps": 10
+          },
+          {
+            "ex": "Rameurs",
+            "reps": 15
+          },
+          {
+            "ex": "Dips",
+            "reps": 10
+          },
+          {
+            "ex": "Levers de jambes",
+            "reps": 20
+          },
+          {
+            "ex": "Gainage droit",
+            "reps": 30
+          },
+          {
+            "ex": "Superman",
+            "reps": 40
+          },
+          {
+            "ex": "Gainage latéral",
+            "reps": 40
+          },
+          {
+            "ex": "Gainage latéral",
+            "reps": 40
+          }
+        ],
+        [
+          {
+            "ex": "Squat",
+            "reps": 25
+          },
+          {
+            "ex": "Fentes",
+            "reps": 25
+          },
+          {
+            "ex": "Fentes latérales",
+            "reps": 25
+          },
+          {
+            "ex": "Shoulder bridge",
+            "reps": 20
+          },
+          {
+            "ex": "Chaise",
+            "reps": 40
+          },
+          {
+            "ex": "Squat",
+            "reps": 25
+          },
+          {
+            "ex": "Fentes unilatérales (jambe gauche)",
+            "reps": 30
+          },
+          {
+            "ex": "Fentes unilatérales (jambe droite)",
+            "reps": 30
+          },
+          {
+            "ex": "Shoulder bridge",
+            "reps": 20
+          },
+          {
+            "ex": "Chaise",
+            "reps": 40
+          }
+        ]
+      ]
+    },
+    {
+      "id": "session_1788249262563",
+      "category": "course",
+      "title": "PREPA - COURSE 4",
+      "blocks": [
+        {
+          "type": "echauffement",
+          "val": 10,
+          "unit": "min"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "repos",
+          "val": 2,
+          "unit": "min"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        },
+        {
+          "type": "sprint",
+          "val": 15,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "id": "session_1788249305965",
+      "category": "renfo",
+      "title": "PREPA - RENFO 4.1",
+      "format": "wod1",
+      "params": {
+        "duration_min": 10,
+        "target_reps": 10
+      },
+      "exercises": [
+        {
+          "name": "Squat jump",
+          "reps": 10
+        },
+        {
+          "name": "Dips",
+          "reps": 10
+        },
+        {
+          "name": "Fentes croisées",
+          "reps": 10
+        },
+        {
+          "name": "Pompe",
+          "reps": 10
+        }
+      ]
+    },
+    {
+      "id": "session_1788249514076",
+      "category": "renfo",
+      "title": "PREPA - RENFO 4.2",
+      "format": "wod2",
+      "params": {
+        "series": 3,
+        "series_min": 1
+      },
+      "exercises": [
+        {
+          "name": "Fentes croisées",
+          "reps": 10
+        },
+        {
+          "name": "Pompes commando",
+          "reps": 10
+        },
+        {
+          "name": "Squat sumo",
+          "reps": 10
+        },
+        {
+          "name": "Shoulder tap",
+          "reps": 10
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "id": "ex_1",
+      "name": "Abdos torsion",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_2",
+      "name": "Chaise",
+      "unit": "sec"
+    },
+    {
+      "id": "ex_3",
+      "name": "Crunch",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_4",
+      "name": "Dips",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_5",
+      "name": "Fentes",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_6",
+      "name": "Fentes croisées",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_7",
+      "name": "Fentes latérales",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_8",
+      "name": "Fentes unilatérales (jambe droite)",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_9",
+      "name": "Fentes unilatérales (jambe gauche)",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_10",
+      "name": "Gainage droit",
+      "unit": "sec"
+    },
+    {
+      "id": "ex_11",
+      "name": "Gainage latéral",
+      "unit": "sec"
+    },
+    {
+      "id": "ex_12",
+      "name": "Levers de jambes",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_13",
+      "name": "Mountain climber",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_14",
+      "name": "Pompe",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_15",
+      "name": "Pompes commando",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_16",
+      "name": "Pompes diamant",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_17",
+      "name": "Pompes larges",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_18",
+      "name": "Rameurs",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_1788250272287",
+      "name": "Shoulder bridge",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_19",
+      "name": "Shoulder tap",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_20",
+      "name": "Sit up",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_21",
+      "name": "Squat",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_22",
+      "name": "Squat jump",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_23",
+      "name": "Squat sumo",
+      "unit": "réps"
+    },
+    {
+      "id": "ex_24",
+      "name": "Superman",
+      "unit": "sec"
+    }
+  ]
+}
