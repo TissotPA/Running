@@ -1,753 +1,1627 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Timer Intervalle Course</title>
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-blue: #38bdf8;
-      --accent-green: #22c55e;
-      --accent-orange: #f97316;
-      --accent-red: #ef4444;
-      --accent-purple: #a855f7;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    html, body {
-      width: 100%;
-      overflow-x: hidden;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0.75rem;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    header {
-      text-align: center;
-      padding: 0.25rem 0;
-    }
-
-    header h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--accent-blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 1rem;
-      padding: 1rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      width: 100%;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 0.85rem;
-    }
-
-    label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    input[type="text"], input[type="number"], select {
-      background-color: var(--bg-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 0.5rem;
-      color: var(--text-main);
-      padding: 0.65rem;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent-blue);
-    }
-
-    .btn {
-      background-color: var(--accent-blue);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.75rem 0.5rem;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: opacity 0.2s, transform 0.1s;
-      width: 100%;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .btn-secondary { background-color: #334155; color: var(--text-main); }
-    .btn-danger { background-color: #451a1a; color: #f87171; border: 1px solid #7f1d1d; }
-    .btn-success { background-color: var(--accent-green); color: #000; }
-    .btn-warning { background-color: var(--accent-orange); color: #000; }
-
-    .btn-group {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .interval-input-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .interval-duration-group {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .interval-duration-group input {
-      flex: 2;
-    }
-
-    .interval-duration-group select {
-      flex: 1;
-    }
-
-    .interval-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-height: 200px;
-      overflow-y: auto;
-      margin-bottom: 1rem;
-      padding-right: 0.25rem;
-    }
-
-    .interval-item {
-      background-color: var(--bg-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 0.5rem;
-      padding: 0.65rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .interval-info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .type-badge {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      flex-shrink: 0;
-    }
-
-    .badge-warmup { background-color: var(--accent-purple); }
-    .badge-work { background-color: var(--accent-green); }
-    .badge-rest { background-color: var(--accent-orange); }
-    .badge-cooldown { background-color: var(--accent-blue); }
-
-    .interval-item .remove-btn {
-      background: none;
-      border: none;
-      color: #ef4444;
-      cursor: pointer;
-      font-size: 1.25rem;
-      padding: 0 0.5rem;
-    }
-
-    .preset-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .preset-item {
-      background-color: var(--bg-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 0.75rem;
-      padding: 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .preset-title {
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .preset-details {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* VUE RUNNER ACTIVE */
-    .runner-container {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 85vh;
-      padding: 1rem 0;
-    }
-
-    .runner-header { width: 100%; }
-    .runner-title { font-size: 1.1rem; color: var(--text-muted); }
-    .step-counter { font-size: 0.85rem; color: var(--accent-blue); margin-top: 0.25rem; }
-
-    .timer-display {
-      font-size: 4.5rem;
-      font-weight: 800;
-      font-family: monospace;
-      line-height: 1;
-      margin: 1rem 0;
-    }
-
-    .current-step-name {
-      font-size: 1.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-
-    .next-step-preview {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      background-color: rgba(255, 255, 255, 0.05);
-      padding: 0.4rem 0.8rem;
-      border-radius: 2rem;
-      display: inline-block;
-    }
-
-    .runner-controls {
-      width: 100%;
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .runner-controls .btn {
-      padding: 0.85rem;
-      font-size: 1.1rem;
-    }
-
-    .hidden { display: none !important; }
-    .empty-msg { text-align: center; color: var(--text-muted); padding: 1rem; font-style: italic; }
-
-    body.state-warmup { background-color: #1e1b4b; }
-    body.state-work { background-color: #064e3b; }
-    body.state-rest { background-color: #7c2d12; }
-    body.state-cooldown { background-color: #0c4a6e; }
-
-    @media (min-width: 480px) {
-      .interval-input-grid {
-        display: grid;
-        grid-template-columns: 1.5fr 1fr;
-      }
-      .timer-display {
-        font-size: 6rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTimer Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        echauffement: '#f59e0b',
+                        sprint: '#ef4444',
+                        vma: '#8b5cf6',
+                        ralenti: '#3b82f6',
+                        repos: '#10b981',
+                        renfo: '#ec4899'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
 
-  <div class="container" id="app-container">
-    <header id="main-header">
-      <h1>⚡ Running Timer</h1>
+    <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 id="app-title" class="text-xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-stopwatch text-indigo-400"></i> FitTimer Pro
+            </h1>
+            <div id="header-actions" class="flex items-center gap-2">
+                <button id="btn-nav-exercises" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-2 rounded-xl transition flex items-center gap-2 text-pink-400">
+                    <i class="fa-solid fa-dumbbell"></i> Banque d'exos
+                </button>
+                <button id="btn-nav-library" class="hidden text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-2 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-folder-open text-indigo-400"></i> Mes Séances
+                </button>
+            </div>
+        </div>
     </header>
 
-    <!-- 1. VUE DE LISTE DES SÉANCES -->
-    <main id="view-list" class="view">
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 style="font-size: 1.2rem;">Mes Séances</h2>
-          <button class="btn" id="btn-open-create" style="width: auto; padding: 0.5rem 0.8rem;">+ Nouvelle</button>
-        </div>
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-1 w-full">
 
-        <div id="workout-list" class="preset-list">
-          <!-- Injecté dynamiquement -->
-        </div>
-      </div>
-    </main>
+        <div id="library-view" class="space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-100">Mes Séances</h2>
+                    <p class="text-xs text-slate-400">Gérez, réorganisez, éditez et lancez vos séances de Course et Renforcement Musculaire</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="btn-export-json" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium py-2 px-3 rounded-xl transition flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-download text-indigo-400"></i> Exporter
+                    </button>
+                    <button id="btn-import-trigger" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium py-2 px-3 rounded-xl transition flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-upload text-emerald-400"></i> Importer
+                    </button>
+                    <input type="file" id="file-import-json" accept=".json" class="hidden">
 
-    <!-- 2. VUE DE CRÉATION DE SÉANCE -->
-    <main id="view-create" class="view hidden">
-      <div class="card">
-        <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Créer une séance</h2>
-        
-        <div class="form-group">
-          <label for="workout-name">Nom de la séance</label>
-          <input type="text" id="workout-name" placeholder="ex: 30/30 VMA ou Fractional 10min">
-        </div>
-
-        <div class="form-group">
-          <label>Ajouter un intervalle</label>
-          <div class="interval-input-grid">
-            <select id="interval-type">
-              <option value="warmup">Échauffement</option>
-              <option value="work" selected>Effort (Sprint / VMA)</option>
-              <option value="rest">Repos</option>
-              <option value="cooldown">Retour au calme</option>
-            </select>
-            <div class="interval-duration-group">
-              <input type="number" id="interval-duration" placeholder="Durée" min="1" value="30">
-              <select id="interval-unit">
-                <option value="sec">Sec</option>
-                <option value="min">Min</option>
-              </select>
+                    <button id="btn-create-course" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-3.5 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-person-running"></i> + Course
+                    </button>
+                    <button id="btn-create-renfo" class="bg-pink-600 hover:bg-pink-500 text-white font-medium py-2 px-3.5 rounded-xl transition shadow-lg shadow-pink-600/30 flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-dumbbell"></i> + Renfo
+                    </button>
+                </div>
             </div>
-          </div>
-          <button class="btn btn-secondary" id="btn-add-interval" style="margin-top: 0.5rem;">+ Ajouter l'intervalle</button>
+
+            <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </div>
         </div>
 
-        <!-- Générateur rapide de répétitions -->
-        <div class="form-group" style="background: rgba(255,255,255,0.03); padding: 0.75rem; border-radius: 0.5rem;">
-          <label style="font-size: 0.75rem;">Générateur rapide de blocs</label>
-          <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
-            <input type="number" id="repeat-count" placeholder="Fois" value="10" style="width: 70px;">
-            <span style="align-self: center; font-size: 0.8rem; flex: 1;">x (Effort + Repos)</span>
-            <button class="btn btn-secondary" id="btn-add-block" style="font-size: 0.8rem; padding: 0.4rem 0.6rem; width: auto;">Multiplier</button>
-          </div>
+        <div id="exercises-view" class="hidden space-y-6">
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-dumbbell text-pink-500"></i> Banque d'Exercices
+                    </h2>
+                    <p class="text-xs text-slate-400">Créez, modifiez, ajustez les unités par défaut ou supprimez vos exercices de renforcement</p>
+                </div>
+                <button id="btn-reset-exercises" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 py-2 px-3 rounded-xl transition text-xs flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-left text-amber-400"></i> Réinitialiser par défaut
+                </button>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm shadow-xl">
+                <h3 id="exercise-form-title" class="text-sm font-semibold mb-4 text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-pink-400"></i> Ajouter un nouvel exercice
+                </h3>
+                <form id="exercise-form" class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <input type="hidden" id="exercise-edit-id" value="">
+                    
+                    <div class="sm:col-span-7">
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Nom de l'exercice</label>
+                        <input type="text" id="exercise-name-input" placeholder="Ex: Squat, Chaise, Dips..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500 focus:outline-none">
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Unité par défaut</label>
+                        <select id="exercise-unit-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm font-semibold text-pink-400 focus:ring-2 focus:ring-pink-500 focus:outline-none">
+                            <option value="réps">réps (Répétitions)</option>
+                            <option value="sec">sec (Secondes / Temps)</option>
+                        </select>
+                    </div>
+
+                    <div class="sm:col-span-2 flex items-end">
+                        <button type="submit" id="btn-submit-exercise" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-lg shadow-pink-600/30 flex items-center justify-center gap-1.5 text-sm">
+                            <i class="fa-solid fa-check"></i> Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-slate-800/40 border border-slate-700/40 rounded-2xl p-4">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Exercice</span>
+                    <span id="exercises-count-badge" class="text-xs bg-slate-700 text-slate-300 px-2.5 py-0.5 rounded-full font-mono">0 exercices</span>
+                </div>
+                <div id="exercises-list-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                </div>
+            </div>
         </div>
 
-        <label>Séquence de la séance</label>
-        <div id="created-intervals-list" class="interval-list">
-          <!-- Injecté dynamiquement -->
+        <div id="editor-course-view" class="hidden space-y-6">
+            <div class="flex items-center gap-3">
+                <button class="btn-back-to-library p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="flex-1">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider block">Séance de Course</span>
+                    <input type="text" id="course-title-input" placeholder="Nom de la séance..." class="bg-transparent text-xl font-bold text-white border-b border-transparent focus:border-indigo-500 focus:outline-none w-full py-0.5">
+                </div>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm shadow-xl">
+                <h3 class="text-sm font-semibold mb-4 text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-indigo-400"></i> Ajouter un bloc d'effort
+                </h3>
+                <form id="add-course-block-form" class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div class="sm:col-span-5">
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Type d'effort</label>
+                        <select id="course-type" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <option value="echauffement">🔥 Échauffement</option>
+                            <option value="sprint">⚡ Sprint</option>
+                            <option value="vma">🏃 VMA</option>
+                            <option value="ralenti">🚶 Ralenti</option>
+                            <option value="repos">🧘 Repos</option>
+                        </select>
+                    </div>
+
+                    <div class="sm:col-span-4 flex gap-2">
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Valeur</label>
+                            <input type="number" id="course-val" min="1" value="30" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                        <div class="w-24">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Unité</label>
+                            <select id="course-unit" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="sec">sec</option>
+                                <option value="min">min</option>
+                                <option value="m">m (mètres)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3 flex items-end">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Ajouter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800/40 p-3 rounded-xl border border-slate-700/40">
+                <div class="flex items-center gap-2">
+                    <button id="btn-select-all" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">Tout sélectionner</button>
+                    <button id="btn-deselect-all" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">Désélectionner</button>
+                    <span id="selected-count" class="text-xs text-slate-400 ml-2">0 bloc(s)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="repeat-count" min="2" max="50" value="2" class="w-16 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-center">
+                    <button id="btn-duplicate-blocks" class="text-xs bg-indigo-600/80 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                        <i class="fa-solid fa-clone"></i> Multiplier
+                    </button>
+                    <button id="btn-delete-selected-blocks" class="text-xs bg-rose-600/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="course-blocks-container" class="space-y-2 min-h-[120px]"></div>
+
+            <div class="pt-4 flex gap-4">
+                <button class="btn-save-session flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk text-indigo-400"></i> Enregistrer
+                </button>
+                <button id="btn-start-course-session" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-emerald-900/40 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play"></i> Lancer la séance
+                </button>
+            </div>
         </div>
 
-        <div class="btn-group">
-          <button class="btn btn-secondary" id="btn-cancel-create" style="flex:1;">Annuler</button>
-          <button class="btn btn-success" id="btn-save-workout" style="flex:2;">Enregistrer</button>
+        <div id="editor-renfo-view" class="hidden space-y-6">
+            <div class="flex items-center gap-3">
+                <button class="btn-back-to-library p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-300">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="flex-1">
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-wider block">Séance de Renforcement Musculaire</span>
+                    <input type="text" id="renfo-title-input" placeholder="Nom de la séance..." class="bg-transparent text-xl font-bold text-white border-b border-transparent focus:border-pink-500 focus:outline-none w-full py-0.5">
+                </div>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm shadow-xl space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Format de séance</label>
+                    <select id="renfo-format-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-pink-400 font-bold focus:ring-2 focus:ring-pink-500 focus:outline-none">
+                        <option value="circuit">🏋️ Circuit Training (n séries / m exos / t sec effort / r sec repos)</option>
+                        <option value="tabata">🔥 TABATA (n tabatas de 2 exos / m min / t sec effort / r sec repos)</option>
+                        <option value="emom">⏱️ EMOM (n EMOMs de m min / exercices et réps ou durées sur mesure)</option>
+                        <option value="wod1">⚡ WOD #1 (AMRAP : n min pour faire max de tours / réps ou durées sur mesure)</option>
+                        <option value="wod2">💥 WOD #2 (n séries de m min / max réps)</option>
+                    </select>
+                </div>
+
+                <div id="renfo-params-container" class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-700/40">
+                </div>
+            </div>
+
+            <div id="exercise-selection-wrapper" class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm shadow-xl space-y-4">
+                <h3 class="text-sm font-semibold text-slate-200 flex items-center justify-between">
+                    <span><i class="fa-solid fa-list-check text-pink-400 mr-2"></i> Configuration des exercices</span>
+                    <span id="renfo-exercise-count-tag" class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-full font-mono">0 exercices</span>
+                </h3>
+
+                <div id="standard-exercise-picker-container" class="space-y-4">
+                    <div class="flex gap-2">
+                        <select id="exercise-picker" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-pink-500 focus:outline-none">
+                        </select>
+                        <button id="btn-add-exercise" class="bg-pink-600 hover:bg-pink-500 text-white font-medium py-2 px-4 rounded-xl transition text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Ajouter
+                        </button>
+                    </div>
+
+                    <div id="selected-exercises-list" class="space-y-2 min-h-[60px]"></div>
+                </div>
+
+                <div id="tabata-blocks-container" class="hidden space-y-4"></div>
+
+                <div id="emom-blocks-container" class="hidden space-y-6"></div>
+            </div>
+
+            <div class="pt-4 flex gap-4">
+                <button class="btn-save-session flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk text-pink-400"></i> Enregistrer
+                </button>
+            </div>
         </div>
-      </div>
+
+        <div id="timer-view" class="hidden space-y-6 max-w-xl mx-auto">
+            <div id="timer-card" class="bg-slate-800/90 border border-slate-700 rounded-3xl p-8 text-center backdrop-blur-md shadow-2xl relative overflow-hidden transition-colors duration-500">
+                <div class="flex justify-between items-center text-xs text-slate-400 mb-6 font-mono">
+                    <span id="timer-step-index">Étape 0/0</span>
+                    <span id="timer-next-step">Suivant: --</span>
+                </div>
+
+                <div class="mb-4">
+                    <span id="timer-status-badge" class="text-sm font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-slate-700/50 border border-slate-600/50 inline-block">
+                        Préparation
+                    </span>
+                    <h2 id="timer-label" class="text-2xl font-extrabold mt-3 text-white">Décompte initial</h2>
+                </div>
+
+                <div class="my-8">
+                    <div id="timer-display" class="text-7xl sm:text-8xl font-black font-mono tracking-tighter text-indigo-400 drop-shadow-md">
+                        00:10
+                    </div>
+                </div>
+
+                <div class="w-full bg-slate-900/80 rounded-full h-3 mb-8 overflow-hidden p-0.5 border border-slate-700/50">
+                    <div id="timer-progress" class="bg-indigo-500 h-full rounded-full transition-all duration-300 w-0"></div>
+                </div>
+
+                <div class="flex justify-center items-center gap-4">
+                    <button id="btn-pause-timer" class="w-14 h-14 bg-slate-700 hover:bg-slate-600 rounded-full text-white text-xl flex items-center justify-center transition shadow-lg">
+                        <i class="fa-solid fa-pause"></i>
+                    </button>
+                    <button id="btn-skip-timer" title="Étape suivante" class="w-14 h-14 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white border border-amber-500/30 rounded-full text-xl flex items-center justify-center transition shadow-lg">
+                        <i class="fa-solid fa-forward-step"></i>
+                    </button>
+                    <button id="btn-stop-timer" class="w-14 h-14 bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/30 rounded-full text-xl flex items-center justify-center transition shadow-lg">
+                        <i class="fa-solid fa-square"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- 3. VUE RUNNER / LECTEUR DE SÉANCE -->
-    <main id="view-runner" class="view hidden">
-      <div class="runner-container">
-        <div class="runner-header">
-          <div class="runner-title" id="runner-workout-title">Nom de la séance</div>
-          <div class="step-counter" id="runner-step-counter">Intervalle 1 / 8</div>
+    <!-- MODALE ALERTE STYLISÉE -->
+    <div id="modal-alert" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800/95 border border-slate-700/80 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+            <div id="modal-alert-icon-bg" class="w-16 h-16 bg-slate-900 border border-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                <i id="modal-alert-icon" class="fa-solid fa-circle-info text-2xl text-indigo-400"></i>
+            </div>
+            <h3 id="modal-alert-title" class="text-lg font-bold text-white mb-2">Information</h3>
+            <p id="modal-alert-message" class="text-xs text-slate-400 mb-6 leading-relaxed">Message...</p>
+            <button id="modal-alert-btn" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold py-3 px-4 rounded-xl transition shadow-lg shadow-indigo-600/30 text-sm">
+                D'accord
+            </button>
         </div>
+    </div>
 
-        <div>
-          <div class="current-step-name" id="runner-step-name">Échauffement</div>
-          <div class="timer-display" id="runner-timer">00:00</div>
-          <div class="next-step-preview" id="runner-next-step">Suivant: Sprint (30s)</div>
+    <!-- MODALE CONFIRMATION STYLISÉE -->
+    <div id="modal-confirm" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800/95 border border-slate-700/80 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+            <div class="w-16 h-16 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-rose-400"></i>
+            </div>
+            <h3 id="modal-confirm-title" class="text-lg font-bold text-white mb-2">Confirmation</h3>
+            <p id="modal-confirm-message" class="text-xs text-slate-400 mb-6 leading-relaxed">Êtes-vous sûr ?</p>
+            <div class="flex gap-3">
+                <button id="modal-confirm-cancel" class="flex-1 bg-slate-700/80 hover:bg-slate-700 border border-slate-600/50 text-slate-200 font-medium py-2.5 px-4 rounded-xl transition text-xs">
+                    Annuler
+                </button>
+                <button id="modal-confirm-ok" class="flex-1 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-semibold py-2.5 px-4 rounded-xl transition shadow-lg shadow-rose-600/30 text-xs">
+                    Confirmer
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="runner-controls">
-          <button class="btn btn-secondary" id="btn-stop-runner">Quitter</button>
-          <button class="btn btn-warning" id="btn-pause-runner">Pause</button>
-          <button class="btn btn-success hidden" id="btn-resume-runner">Reprendre</button>
-        </div>
-      </div>
-    </main>
+    <script>
+        // --- BASE DE DONNÉES PAR DÉFAUT DES EXERCICES ---
+        const DEFAULT_EXERCISES = [
+            { id: 'ex_1', name: "Abdos torsion", unit: "réps" },
+            { id: 'ex_2', name: "Chaise", unit: "sec" },
+            { id: 'ex_3', name: "Crunch", unit: "réps" },
+            { id: 'ex_4', name: "Dips", unit: "réps" },
+            { id: 'ex_5', name: "Fentes", unit: "réps" },
+            { id: 'ex_6', name: "Fentes croisées", unit: "réps" },
+            { id: 'ex_7', name: "Fentes latérales", unit: "réps" },
+            { id: 'ex_8', name: "Fentes unilatérales (jambe droite)", unit: "réps" },
+            { id: 'ex_9', name: "Fentes unilatérales (jambe gauche)", unit: "réps" },
+            { id: 'ex_10', name: "Gainage droit", unit: "sec" },
+            { id: 'ex_11', name: "Gainage latéral", unit: "sec" },
+            { id: 'ex_12', name: "Levers de jambes", unit: "réps" },
+            { id: 'ex_13', name: "Mountain climber", unit: "réps" },
+            { id: 'ex_14', name: "Pompe", unit: "réps" },
+            { id: 'ex_15', name: "Pompes commando", unit: "réps" },
+            { id: 'ex_16', name: "Pompes diamant", unit: "réps" },
+            { id: 'ex_17', name: "Pompes larges", unit: "réps" },
+            { id: 'ex_18', name: "Rameurs", unit: "réps" },
+            { id: 'ex_19', name: "Shoulder tap", unit: "réps" },
+            { id: 'ex_20', name: "Sit up", unit: "réps" },
+            { id: 'ex_21', name: "Squat", unit: "réps" },
+            { id: 'ex_22', name: "Squat jump", unit: "réps" },
+            { id: 'ex_23', name: "Squat sumo", unit: "réps" },
+            { id: 'ex_24', name: "Superman", unit: "sec" }
+        ];
 
-  </div>
+        let exercisesDatabase = [];
 
-  <script>
-    // === ÉTAT DE L'APPLICATION ===
-    let workouts = JSON.parse(localStorage.getItem('running_workouts')) || [
-      {
-        id: 'default-1',
-        name: 'Séance 30/30 classique',
-        intervals: [
-          { type: 'warmup', duration: 600, label: 'Échauffement' },
-          { type: 'work', duration: 30, label: 'Sprint' },
-          { type: 'rest', duration: 30, label: 'Repos' },
-          { type: 'work', duration: 30, label: 'Sprint' },
-          { type: 'rest', duration: 30, label: 'Repos' },
-          { type: 'work', duration: 30, label: 'Sprint' },
-          { type: 'rest', duration: 30, label: 'Repos' },
-          { type: 'cooldown', duration: 300, label: 'Retour au calme' }
-        ]
-      }
-    ];
-
-    let currentBuildingIntervals = [];
-    let activeWorkout = null;
-    let currentStepIndex = 0;
-    let timeRemaining = 0;
-    let timerInterval = null;
-    let isPaused = false;
-    let wakeLock = null;
-
-    // === AUDIO ENGINE (Web Audio API) ===
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new AudioContext();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    function playBeep(frequency = 800, duration = 150, type = 'sine') {
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        osc.type = type;
-        osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-
-        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration / 1000));
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start();
-        osc.stop(audioCtx.currentTime + (duration / 1000));
-      } catch (e) {
-        console.error("Audio error:", e);
-      }
-    }
-
-    function playCountdownBeep() {
-      playBeep(600, 150);
-    }
-
-    function playTransitionBeep() {
-      playBeep(1200, 200);
-      setTimeout(() => playBeep(1600, 300), 200);
-    }
-
-    // === GESTION DE VUE ===
-    function showView(viewId) {
-      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-      document.getElementById(viewId).classList.remove('hidden');
-
-      const header = document.getElementById('main-header');
-      if (viewId === 'view-runner') {
-        header.classList.add('hidden');
-      } else {
-        header.classList.remove('hidden');
-        document.body.className = '';
-      }
-    }
-
-    // === WAKE LOCK ===
-    async function requestWakeLock() {
-      try {
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen');
-        }
-      } catch (err) {
-        console.warn("Wake Lock non activé:", err);
-      }
-    }
-
-    function releaseWakeLock() {
-      if (wakeLock) {
-        wakeLock.release();
-        wakeLock = null;
-      }
-    }
-
-    // === VUE 1 : LISTE DES SÉANCES ===
-    function renderWorkoutList() {
-      const container = document.getElementById('workout-list');
-      container.innerHTML = '';
-
-      if (workouts.length === 0) {
-        container.innerHTML = '<div class="empty-msg">Aucune séance enregistrée. Créez-en une !</div>';
-        return;
-      }
-
-      workouts.forEach((w) => {
-        const totalDuration = w.intervals.reduce((acc, curr) => acc + curr.duration, 0);
-        const mins = Math.floor(totalDuration / 60);
-        const secs = totalDuration % 60;
-        const durationStr = `${mins}m ${secs > 0 ? secs + 's' : ''}`;
-
-        const item = document.createElement('div');
-        item.className = 'preset-item';
-        item.innerHTML = `
-          <div>
-            <div class="preset-title">${w.name}</div>
-            <div class="preset-details">${w.intervals.length} étapes • Durée: ${durationStr}</div>
-          </div>
-          <div style="display:flex; gap:0.5rem; flex-shrink:0;">
-            <button class="btn btn-danger" onclick="deleteWorkout('${w.id}')" style="padding:0.5rem 0.75rem; width:auto;">🗑️</button>
-            <button class="btn btn-success" onclick="startWorkout('${w.id}')" style="width:auto;">Démarrer</button>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function deleteWorkout(id) {
-      if (confirm('Voulez-vous supprimer cette séance ?')) {
-        workouts = workouts.filter(w => w.id !== id);
-        saveWorkoutsToStorage();
-        renderWorkoutList();
-      }
-    }
-
-    function saveWorkoutsToStorage() {
-      localStorage.setItem('running_workouts', JSON.stringify(workouts));
-    }
-
-    // === VUE 2 : CRÉATION DE SÉANCE ===
-    document.getElementById('btn-open-create').addEventListener('click', () => {
-      currentBuildingIntervals = [];
-      document.getElementById('workout-name').value = '';
-      renderBuildingIntervals();
-      showView('view-create');
-    });
-
-    document.getElementById('btn-cancel-create').addEventListener('click', () => {
-      showView('view-list');
-    });
-
-    const labelMap = {
-      warmup: 'Échauffement',
-      work: 'Effort',
-      rest: 'Repos',
-      cooldown: 'Retour au calme'
-    };
-
-    document.getElementById('btn-add-interval').addEventListener('click', () => {
-      const type = document.getElementById('interval-type').value;
-      const durationVal = parseInt(document.getElementById('interval-duration').value) || 0;
-      const unit = document.getElementById('interval-unit').value;
-
-      if (durationVal <= 0) return;
-
-      const durationSec = unit === 'min' ? durationVal * 60 : durationVal;
-
-      currentBuildingIntervals.push({
-        type: type,
-        duration: durationSec,
-        label: labelMap[type]
-      });
-
-      renderBuildingIntervals();
-    });
-
-    document.getElementById('btn-add-block').addEventListener('click', () => {
-      const count = parseInt(document.getElementById('repeat-count').value) || 1;
-      const workDur = parseInt(document.getElementById('interval-duration').value) || 30;
-      const unit = document.getElementById('interval-unit').value;
-      const durationSec = unit === 'min' ? workDur * 60 : workDur;
-
-      for (let i = 0; i < count; i++) {
-        currentBuildingIntervals.push({ type: 'work', duration: durationSec, label: 'Effort' });
-        currentBuildingIntervals.push({ type: 'rest', duration: durationSec, label: 'Repos' });
-      }
-      renderBuildingIntervals();
-    });
-
-    function renderBuildingIntervals() {
-      const list = document.getElementById('created-intervals-list');
-      list.innerHTML = '';
-
-      if (currentBuildingIntervals.length === 0) {
-        list.innerHTML = '<div class="empty-msg">Ajoutez au moins un intervalle.</div>';
-        return;
-      }
-
-      currentBuildingIntervals.forEach((item, index) => {
-        const mins = Math.floor(item.duration / 60);
-        const secs = item.duration % 60;
-        const timeStr = mins > 0 ? `${mins}m ${secs > 0 ? secs + 's' : ''}` : `${secs}s`;
-
-        const el = document.createElement('div');
-        el.className = 'interval-item';
-        el.innerHTML = `
-          <div class="interval-info">
-            <span class="type-badge badge-${item.type}"></span>
-            <span><strong>${item.label}</strong> (${timeStr})</span>
-          </div>
-          <button class="remove-btn" onclick="removeBuildingInterval(${index})">✕</button>
-        `;
-        list.appendChild(el);
-      });
-    }
-
-    function removeBuildingInterval(index) {
-      currentBuildingIntervals.splice(index, 1);
-      renderBuildingIntervals();
-    }
-
-    document.getElementById('btn-save-workout').addEventListener('click', () => {
-      const name = document.getElementById('workout-name').value.trim() || 'Séance sans nom';
-      if (currentBuildingIntervals.length === 0) {
-        alert('Veuillez ajouter au moins un intervalle à la séance.');
-        return;
-      }
-
-      const newWorkout = {
-        id: 'w-' + Date.now(),
-        name: name,
-        intervals: [...currentBuildingIntervals]
-      };
-
-      workouts.push(newWorkout);
-      saveWorkoutsToStorage();
-      renderWorkoutList();
-      showView('view-list');
-    });
-
-    // === VUE 3 : EXÉCUTION DE LA SÉANCE ===
-    function startWorkout(id) {
-      activeWorkout = workouts.find(w => w.id === id);
-      if (!activeWorkout || activeWorkout.intervals.length === 0) return;
-
-      initAudio();
-      requestWakeLock();
-
-      currentStepIndex = 0;
-      isPaused = false;
-      showView('view-runner');
-      loadStep(currentStepIndex);
-
-      document.getElementById('btn-pause-runner').classList.remove('hidden');
-      document.getElementById('btn-resume-runner').classList.add('hidden');
-
-      startTimer();
-    }
-
-    function loadStep(index) {
-      if (index >= activeWorkout.intervals.length) {
-        finishWorkout();
-        return;
-      }
-
-      const step = activeWorkout.intervals[index];
-      timeRemaining = step.duration;
-
-      document.getElementById('runner-workout-title').innerText = activeWorkout.name;
-      document.getElementById('runner-step-counter').innerText = `Étape ${index + 1} / ${activeWorkout.intervals.length}`;
-      document.getElementById('runner-step-name').innerText = step.label;
-      
-      document.body.className = `state-${step.type}`;
-
-      const nextStep = activeWorkout.intervals[index + 1];
-      if (nextStep) {
-        const nMins = Math.floor(nextStep.duration / 60);
-        const nSecs = nextStep.duration % 60;
-        const nTimeStr = nMins > 0 ? `${nMins}m ${nSecs > 0 ? nSecs + 's' : ''}` : `${nSecs}s`;
-        document.getElementById('runner-next-step').innerText = `Suivant : ${nextStep.label} (${nTimeStr})`;
-      } else {
-        document.getElementById('runner-next-step').innerText = 'Dernière étape !';
-      }
-
-      updateTimerDisplay();
-    }
-
-    function updateTimerDisplay() {
-      const mins = Math.floor(timeRemaining / 60);
-      const secs = timeRemaining % 60;
-      document.getElementById('runner-timer').innerText = 
-        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-
-    function startTimer() {
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        if (isPaused) return;
-
-        timeRemaining--;
-
-        if (timeRemaining > 0 && timeRemaining <= 3) {
-          playCountdownBeep();
+        function loadExercisesDatabase() {
+            const cached = localStorage.getItem('fitsessions_exercises_v1');
+            if (cached) {
+                try { exercisesDatabase = JSON.parse(cached); } catch(e) { exercisesDatabase = []; }
+            }
+            if (!exercisesDatabase || exercisesDatabase.length === 0) {
+                exercisesDatabase = JSON.parse(JSON.stringify(DEFAULT_EXERCISES));
+                saveExercisesDatabase();
+            }
+            sortExercisesDatabase();
         }
 
-        if (timeRemaining < 0) {
-          playTransitionBeep();
-          currentStepIndex++;
-          loadStep(currentStepIndex);
-        } else {
-          updateTimerDisplay();
+        function saveExercisesDatabase() {
+            localStorage.setItem('fitsessions_exercises_v1', JSON.stringify(exercisesDatabase));
         }
-      }, 1000);
-    }
 
-    function finishWorkout() {
-      clearInterval(timerInterval);
-      releaseWakeLock();
-      alert('Bravo ! Séance terminée avec succès ! 🎉');
-      showView('view-list');
-    }
+        function sortExercisesDatabase() {
+            exercisesDatabase.sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+        }
 
-    document.getElementById('btn-pause-runner').addEventListener('click', () => {
-      isPaused = true;
-      document.getElementById('btn-pause-runner').classList.add('hidden');
-      document.getElementById('btn-resume-runner').classList.remove('hidden');
-    });
+        function getExerciseUnit(exName) {
+            const found = exercisesDatabase.find(e => e.name.toLowerCase() === exName.toLowerCase());
+            return found ? found.unit : 'réps';
+        }
 
-    document.getElementById('btn-resume-runner').addEventListener('click', () => {
-      isPaused = false;
-      document.getElementById('btn-resume-runner').classList.add('hidden');
-      document.getElementById('btn-pause-runner').classList.remove('hidden');
-    });
+        const COURSE_EFFORT_CONFIG = {
+            echauffement: { label: 'Échauffement', color: 'bg-amber-500', text: 'text-amber-500', icon: 'fa-fire' },
+            sprint: { label: 'Sprint', color: 'bg-rose-500', text: 'text-rose-500', icon: 'fa-bolt' },
+            vma: { label: 'VMA', color: 'bg-purple-500', text: 'text-purple-500', icon: 'fa-person-running' },
+            ralenti: { label: 'Ralenti', color: 'bg-blue-500', text: 'text-blue-500', icon: 'fa-person-walking' },
+            repos: { label: 'Repos', color: 'bg-emerald-500', text: 'text-emerald-500', icon: 'fa-heart-pulse' }
+        };
 
-    document.getElementById('btn-stop-runner').addEventListener('click', () => {
-      if (confirm('Voulez-vous vraiment quitter la séance en cours ?')) {
-        clearInterval(timerInterval);
-        releaseWakeLock();
-        showView('view-list');
-      }
-    });
+        const RENFO_FORMATS = {
+            circuit: {
+                label: "Circuit Training",
+                fields: [
+                    { id: 'series', label: 'Nombre de séries (n)', default: 3, min: 1 },
+                    { id: 'work_sec', label: 'Travail (t sec)', default: 40, min: 5 },
+                    { id: 'rest_sec', label: 'Repos (r sec)', default: 20, min: 0 }
+                ]
+            },
+            tabata: {
+                label: "TABATA",
+                fields: [
+                    { id: 'count', label: 'Nombre de Tabatas (n)', default: 2, min: 1 },
+                    { id: 'duration_min', label: 'Durée / Tabata (m min)', default: 4, min: 1 },
+                    { id: 'work_sec', label: 'Effort (t sec)', default: 20, min: 5 },
+                    { id: 'rest_sec', label: 'Repos (r sec)', default: 10, min: 0 }
+                ]
+            },
+            emom: {
+                label: "EMOM",
+                fields: [
+                    { id: 'count', label: 'Nombre d\'EMOMs (n)', default: 1, min: 1 },
+                    { id: 'duration_min', label: 'Durée / EMOM (m min)', default: 10, min: 1 }
+                ]
+            },
+            wod1: {
+                label: "WOD #1 (AMRAP)",
+                fields: [
+                    { id: 'duration_min', label: 'Durée totale (n min)', default: 15, min: 1 }
+                ]
+            },
+            wod2: {
+                label: "WOD #2 (Intervalle)",
+                fields: [
+                    { id: 'series', label: 'Nombre de séries (n)', default: 4, min: 1 },
+                    { id: 'series_min', label: 'Minutes / série (m)', default: 3, min: 1 }
+                ]
+            }
+        };
 
-    renderWorkoutList();
-  </script>
+        let sessionsList = [];
+        let currentSessionId = null;
+        let selectedCourseIndices = new Set();
+
+        let timerState = {
+            active: false,
+            paused: false,
+            currentStepIndex: -1,
+            timeRemaining: 10,
+            totalStepDuration: 10,
+            sequence: [],
+            intervalId: null
+        };
+
+        function customAlert(title, message, iconClass = 'fa-circle-info', iconColorClass = 'text-indigo-400') {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('modal-alert');
+                document.getElementById('modal-alert-title').textContent = title;
+                document.getElementById('modal-alert-message').textContent = message;
+                document.getElementById('modal-alert-icon').className = `fa-solid ${iconClass} text-2xl ${iconColorClass}`;
+                modal.classList.remove('hidden');
+
+                const btn = document.getElementById('modal-alert-btn');
+                const handler = () => {
+                    modal.classList.add('hidden');
+                    btn.removeEventListener('click', handler);
+                    resolve();
+                };
+                btn.addEventListener('click', handler);
+            });
+        }
+
+        function customConfirm(title, message) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('modal-confirm');
+                document.getElementById('modal-confirm-title').textContent = title;
+                document.getElementById('modal-confirm-message').textContent = message;
+                modal.classList.remove('hidden');
+
+                const btnOk = document.getElementById('modal-confirm-ok');
+                const btnCancel = document.getElementById('modal-confirm-cancel');
+
+                const cleanup = () => {
+                    modal.classList.add('hidden');
+                    btnOk.removeEventListener('click', onOk);
+                    btnCancel.removeEventListener('click', onCancel);
+                };
+
+                const onOk = () => { cleanup(); resolve(true); };
+                const onCancel = () => { cleanup(); resolve(false); };
+
+                btnOk.addEventListener('click', onOk);
+                btnCancel.addEventListener('click', onCancel);
+            });
+        }
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq = 440, type = 'sine', duration = 0.15) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadExercisesDatabase();
+            initExercisePicker();
+            loadLibrary();
+            renderLibrary();
+            setupEventListeners();
+        });
+
+        function initExercisePicker() {
+            const picker = document.getElementById('exercise-picker');
+            if (!picker) return;
+            picker.innerHTML = exercisesDatabase.map(ex => `<option value="${ex.name}">${ex.name} (${ex.unit})</option>`).join('');
+        }
+
+        function saveLibrary() {
+            localStorage.setItem('fitsessions_library_v3', JSON.stringify(sessionsList));
+        }
+
+        function loadLibrary() {
+            const cached = localStorage.getItem('fitsessions_library_v3');
+            if (cached) {
+                try { sessionsList = JSON.parse(cached); } catch (e) { sessionsList = []; }
+            }
+            if (!sessionsList || sessionsList.length === 0) {
+                sessionsList = [
+                    {
+                        id: 'demo_course_1',
+                        category: 'course',
+                        title: 'Sprint & VMA 100m',
+                        blocks: [
+                            { type: 'echauffement', val: 5, unit: 'min' },
+                            { type: 'sprint', val: 100, unit: 'm' },
+                            { type: 'repos', val: 30, unit: 'sec' }
+                        ]
+                    },
+                    {
+                        id: 'demo_renfo_1',
+                        category: 'renfo',
+                        title: '2 Tabatas Explosifs',
+                        format: 'tabata',
+                        params: { count: 2, duration_min: 4, work_sec: 20, rest_sec: 10 },
+                        tabataBlocks: [
+                            { ex1: 'Pompe', ex2: 'Squat jump' },
+                            { ex1: 'Gainage droit', ex2: 'Mountain climber' }
+                        ]
+                    }
+                ];
+                saveLibrary();
+            }
+        }
+
+        const libraryView = document.getElementById('library-view');
+        const exercisesView = document.getElementById('exercises-view');
+        const editorCourseView = document.getElementById('editor-course-view');
+        const editorRenfoView = document.getElementById('editor-renfo-view');
+        const timerView = document.getElementById('timer-view');
+        const cardsGrid = document.getElementById('cards-grid');
+        const btnNavLibrary = document.getElementById('btn-nav-library');
+        const btnNavExercises = document.getElementById('btn-nav-exercises');
+
+        function renderLibrary() {
+            cardsGrid.innerHTML = '';
+
+            sessionsList.forEach((session, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 hover:border-slate-500 transition-all shadow-xl flex flex-col justify-between';
+                
+                const isFirst = index === 0;
+                const isLast = index === sessionsList.length - 1;
+                const isCourse = session.category === 'course';
+
+                let subText = '';
+                if (isCourse) {
+                    subText = `${session.blocks ? session.blocks.length : 0} bloc(s) de course`;
+                } else {
+                    const formatLabel = RENFO_FORMATS[session.format] ? RENFO_FORMATS[session.format].label : session.format;
+                    if (session.format === 'tabata') {
+                        subText = `${session.params ? session.params.count : 1} Tabata(s) configuré(s)`;
+                    } else if (session.format === 'emom') {
+                        subText = `${session.params ? session.params.count : 1} EMOM(s) de ${session.params ? session.params.duration_min : 10} min`;
+                    } else {
+                        subText = `${formatLabel} • ${session.exercises ? session.exercises.length : 0} exercice(s)`;
+                    }
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-1">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider ${isCourse ? 'text-indigo-400' : 'text-pink-400'}">
+                                    ${isCourse ? '<i class="fa-solid fa-person-running mr-1"></i> Course' : '<i class="fa-solid fa-dumbbell mr-1"></i> Renforcement'}
+                                </span>
+                                <h3 class="text-lg font-bold text-white">${escapeHtml(session.title)}</h3>
+                            </div>
+                            <div class="flex items-center bg-slate-900 border border-slate-700/80 rounded-lg p-0.5 gap-0.5">
+                                <button class="btn-move-session-up p-1 text-xs text-slate-400 hover:text-white disabled:opacity-30" data-index="${index}" ${isFirst ? 'disabled' : ''}>
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </button>
+                                <button class="btn-move-session-down p-1 text-xs text-slate-400 hover:text-white disabled:opacity-30" data-index="${index}" ${isLast ? 'disabled' : ''}>
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-400 mb-4">${subText}</p>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2 border-t border-slate-700/40">
+                        <button class="btn-start-card flex-1 ${isCourse ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-pink-600 hover:bg-pink-500'} text-white font-semibold py-2 px-3 rounded-xl transition text-xs flex items-center justify-center gap-1.5" data-id="${session.id}">
+                            <i class="fa-solid fa-play"></i> Lancer
+                        </button>
+                        <button class="btn-edit-card bg-slate-700 hover:bg-slate-600 text-slate-200 py-2 px-3 rounded-xl transition text-xs flex items-center justify-center gap-1" data-id="${session.id}">
+                            <i class="fa-solid fa-pen"></i> Éditer
+                        </button>
+                        <button class="btn-clone-card bg-slate-700 hover:bg-slate-600 text-slate-200 py-2 px-2.5 rounded-xl transition text-xs" data-id="${session.id}">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                        <button class="btn-delete-card bg-slate-700 hover:bg-rose-600 text-slate-200 py-2 px-2.5 rounded-xl transition text-xs" data-id="${session.id}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+
+                cardsGrid.appendChild(card);
+            });
+        }
+
+        function renderExercisesList() {
+            const container = document.getElementById('exercises-list-container');
+            const badge = document.getElementById('exercises-count-badge');
+            container.innerHTML = '';
+            badge.textContent = `${exercisesDatabase.length} exercices`;
+
+            if (exercisesDatabase.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-8 border border-dashed border-slate-700/60 rounded-xl text-slate-500 text-xs">Aucun exercice enregistré.</div>`;
+                return;
+            }
+
+            exercisesDatabase.forEach(ex => {
+                const isSec = ex.unit === 'sec';
+                const el = document.createElement('div');
+                el.className = 'flex items-center justify-between bg-slate-900/80 border border-slate-700/60 rounded-xl p-3 gap-2 hover:border-slate-600 transition';
+                
+                el.innerHTML = `
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-sm text-white truncate">${escapeHtml(ex.name)}</div>
+                        <span class="inline-block text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full mt-0.5 ${isSec ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'}">
+                            ${isSec ? '⏱️ Temps (sec)' : '🔢 Répétitions (réps)'}
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-1 flex-shrink-0">
+                        <button class="btn-edit-exercise bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg text-xs transition" data-id="${ex.id}">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn-delete-exercise bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white p-2 rounded-lg text-xs transition" data-id="${ex.id}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function showView(viewName) {
+            libraryView.classList.add('hidden');
+            exercisesView.classList.add('hidden');
+            editorCourseView.classList.add('hidden');
+            editorRenfoView.classList.add('hidden');
+            timerView.classList.add('hidden');
+            btnNavLibrary.classList.remove('hidden');
+
+            if (viewName === 'library') {
+                libraryView.classList.remove('hidden');
+                btnNavLibrary.classList.add('hidden');
+                renderLibrary();
+            } else if (viewName === 'exercises') {
+                exercisesView.classList.remove('hidden');
+                renderExercisesList();
+            } else if (viewName === 'editor-course') {
+                editorCourseView.classList.remove('hidden');
+            } else if (viewName === 'editor-renfo') {
+                editorRenfoView.classList.remove('hidden');
+            } else if (viewName === 'timer') {
+                timerView.classList.remove('hidden');
+            }
+        }
+
+        function openEditor(sessionId) {
+            currentSessionId = sessionId;
+            const session = sessionsList.find(s => s.id === sessionId);
+            if (!session) return;
+
+            if (session.category === 'course') {
+                document.getElementById('course-title-input').value = session.title;
+                selectedCourseIndices.clear();
+                renderCourseBlocks();
+                showView('editor-course');
+            } else {
+                document.getElementById('renfo-title-input').value = session.title;
+                document.getElementById('renfo-format-select').value = session.format || 'circuit';
+                renderRenfoParamsFields();
+                renderExerciseSection();
+                showView('editor-renfo');
+            }
+        }
+
+        function renderCourseBlocks() {
+            const container = document.getElementById('course-blocks-container');
+            container.innerHTML = '';
+            const session = sessionsList.find(s => s.id === currentSessionId);
+            if (!session) return;
+
+            if (session.blocks.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 border-2 border-dashed border-slate-700/60 rounded-xl text-slate-500 text-sm">Aucun bloc dans cette séance.</div>`;
+                return;
+            }
+
+            session.blocks.forEach((block, index) => {
+                const config = COURSE_EFFORT_CONFIG[block.type];
+                const isSelected = selectedCourseIndices.has(index);
+
+                const el = document.createElement('div');
+                el.className = `flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                    isSelected ? 'bg-slate-800 border-indigo-500 ring-1 ring-indigo-500' : 'bg-slate-800/40 border-slate-700/50 hover:border-slate-600'
+                }`;
+
+                el.innerHTML = `
+                    <input type="checkbox" ${isSelected ? 'checked' : ''} class="course-block-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-900 border-slate-700 cursor-pointer" data-index="${index}">
+                    <div class="w-8 h-8 rounded-lg ${config.color}/20 ${config.text} flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid ${config.icon}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 font-semibold text-sm text-slate-200">${config.label}</div>
+                    <div class="font-mono text-sm font-bold text-slate-200 bg-slate-900 px-3 py-1 rounded-lg border border-slate-700">
+                        ${block.val} ${block.unit}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button class="btn-move-course-up p-1.5 text-slate-400 hover:text-slate-200 rounded" data-index="${index}"><i class="fa-solid fa-arrow-up text-xs"></i></button>
+                        <button class="btn-move-course-down p-1.5 text-slate-400 hover:text-slate-200 rounded" data-index="${index}"><i class="fa-solid fa-arrow-down text-xs"></i></button>
+                        <button class="btn-delete-course-block p-1.5 text-slate-400 hover:text-rose-400 rounded" data-index="${index}"><i class="fa-solid fa-xmark text-sm"></i></button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+
+            document.getElementById('selected-count').textContent = `${selectedCourseIndices.size} bloc(s)`;
+        }
+
+        function renderRenfoParamsFields() {
+            const container = document.getElementById('renfo-params-container');
+            const session = sessionsList.find(s => s.id === currentSessionId);
+            if (!session) return;
+
+            const formatKey = document.getElementById('renfo-format-select').value;
+            const formatDef = RENFO_FORMATS[formatKey];
+            if (!session.params) session.params = {};
+
+            container.innerHTML = formatDef.fields.map(f => {
+                const val = session.params[f.id] !== undefined ? session.params[f.id] : f.default;
+                session.params[f.id] = val;
+                return `
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-400 mb-1">${f.label}</label>
+                        <input type="number" min="${f.min}" value="${val}" data-param-id="${f.id}" class="renfo-param-input w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:ring-1 focus:ring-pink-500">
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderExerciseSection() {
+            const session = sessionsList.find(s => s.id === currentSessionId);
+            if (!session) return;
+
+            const standardContainer = document.getElementById('standard-exercise-picker-container');
+            const tabataContainer = document.getElementById('tabata-blocks-container');
+            const emomContainer = document.getElementById('emom-blocks-container');
+            const tag = document.getElementById('renfo-exercise-count-tag');
+
+            standardContainer.classList.add('hidden');
+            tabataContainer.classList.add('hidden');
+            emomContainer.classList.add('hidden');
+
+            initExercisePicker();
+            const optionsHTML = exercisesDatabase.map(ex => `<option value="${ex.name}">${ex.name} (${ex.unit})</option>`).join('');
+
+            if (session.format === 'tabata') {
+                tabataContainer.classList.remove('hidden');
+
+                const n = session.params ? (session.params.count || 1) : 1;
+                if (!session.tabataBlocks) session.tabataBlocks = [];
+
+                const defaultEx1 = exercisesDatabase[0] ? exercisesDatabase[0].name : 'Pompe';
+                const defaultEx2 = exercisesDatabase[1] ? exercisesDatabase[1].name : defaultEx1;
+
+                while (session.tabataBlocks.length < n) {
+                    session.tabataBlocks.push({ ex1: defaultEx1, ex2: defaultEx2 });
+                }
+                if (session.tabataBlocks.length > n) {
+                    session.tabataBlocks = session.tabataBlocks.slice(0, n);
+                }
+
+                tag.textContent = `${n} Tabata(s) (${n * 2} exos)`;
+                tabataContainer.innerHTML = '';
+
+                session.tabataBlocks.forEach((tb, i) => {
+                    const blockDiv = document.createElement('div');
+                    blockDiv.className = 'bg-slate-900/80 border border-slate-700/80 rounded-xl p-4 space-y-3';
+                    blockDiv.innerHTML = `
+                        <h4 class="text-xs font-bold text-pink-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-fire text-pink-500"></i> Tabata #${i + 1}
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] text-slate-400 mb-1">Exercice 1</label>
+                                <select class="tabata-ex-select w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:ring-1 focus:ring-pink-500" data-block-idx="${i}" data-ex-num="1">
+                                    ${optionsHTML}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] text-slate-400 mb-1">Exercice 2</label>
+                                <select class="tabata-ex-select w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:ring-1 focus:ring-pink-500" data-block-idx="${i}" data-ex-num="2">
+                                    ${optionsHTML}
+                                </select>
+                            </div>
+                        </div>
+                    `;
+
+                    tabataContainer.appendChild(blockDiv);
+
+                    blockDiv.querySelector(`select[data-ex-num="1"]`).value = tb.ex1;
+                    blockDiv.querySelector(`select[data-ex-num="2"]`).value = tb.ex2;
+                });
+
+            } else if (session.format === 'emom') {
+                emomContainer.classList.remove('hidden');
+
+                const n = session.params ? (session.params.count || 1) : 1;
+                const m = session.params ? (session.params.duration_min || 10) : 10;
+
+                if (!session.emomBlocks) session.emomBlocks = [];
+
+                while (session.emomBlocks.length < n) {
+                    session.emomBlocks.push([]);
+                }
+                if (session.emomBlocks.length > n) {
+                    session.emomBlocks = session.emomBlocks.slice(0, n);
+                }
+
+                session.emomBlocks.forEach((block, bIdx) => {
+                    while (block.length < m) {
+                        const defaultExObj = exercisesDatabase[block.length % exercisesDatabase.length] || { name: 'Pompe', unit: 'réps' };
+                        block.push({ ex: defaultExObj.name, reps: 10 });
+                    }
+                    if (block.length > m) {
+                        session.emomBlocks[bIdx] = block.slice(0, m);
+                    }
+                });
+
+                tag.textContent = `${n} EMOM(s) de ${m} min (${n * m} min au total)`;
+                emomContainer.innerHTML = '';
+
+                session.emomBlocks.forEach((block, bIdx) => {
+                    const blockDiv = document.createElement('div');
+                    blockDiv.className = 'bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 space-y-3';
+                    
+                    let rowsHTML = block.map((item, minIdx) => {
+                        const currentUnit = getExerciseUnit(item.ex);
+                        return `
+                            <div class="flex items-center gap-2 bg-slate-800/60 p-2.5 rounded-xl border border-slate-700/50">
+                                <span class="text-[11px] font-mono font-bold text-purple-400 w-12">Min ${minIdx + 1}</span>
+                                <select class="emom-ex-select flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:ring-1 focus:ring-purple-500" data-block-idx="${bIdx}" data-min-idx="${minIdx}">
+                                    ${optionsHTML}
+                                </select>
+                                <div class="flex items-center gap-1.5 w-28">
+                                    <input type="number" min="1" value="${item.reps}" class="emom-reps-input w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-center font-bold text-white focus:ring-1 focus:ring-purple-500" data-block-idx="${bIdx}" data-min-idx="${minIdx}">
+                                    <span class="emom-unit-label text-[10px] text-slate-400 font-medium">${currentUnit}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    blockDiv.innerHTML = `
+                        <h4 class="text-xs font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2 pb-1 border-b border-slate-800">
+                            <i class="fa-solid fa-stopwatch text-purple-400"></i> EMOM #${bIdx + 1} (${m} minutes)
+                        </h4>
+                        <div class="space-y-2">
+                            ${rowsHTML}
+                        </div>
+                    `;
+
+                    emomContainer.appendChild(blockDiv);
+
+                    block.forEach((item, minIdx) => {
+                        const select = blockDiv.querySelector(`select[data-block-idx="${bIdx}"][data-min-idx="${minIdx}"]`);
+                        if (select) select.value = item.ex;
+                    });
+                });
+
+            } else {
+                standardContainer.classList.remove('hidden');
+                renderSelectedExercises();
+            }
+        }
+
+        function renderSelectedExercises() {
+            const container = document.getElementById('selected-exercises-list');
+            const session = sessionsList.find(s => s.id === currentSessionId);
+            if (!session) return;
+
+            if (!session.exercises) session.exercises = [];
+
+            session.exercises = session.exercises.map(ex => {
+                if (typeof ex === 'string') return { name: ex, reps: 10 };
+                return ex;
+            });
+
+            document.getElementById('renfo-exercise-count-tag').textContent = `${session.exercises.length} exercice(s)`;
+
+            if (session.exercises.length === 0) {
+                container.innerHTML = `<div class="text-center py-4 border border-dashed border-slate-700/60 rounded-xl text-slate-500 text-xs">Aucun exercice sélectionné. Choisissez-en dans la liste déroulante.</div>`;
+                return;
+            }
+
+            const isWOD1 = (session.format === 'wod1');
+
+            container.innerHTML = session.exercises.map((exObj, idx) => {
+                const unit = getExerciseUnit(exObj.name);
+                return `
+                    <div class="flex items-center justify-between bg-slate-900/80 border border-slate-700/60 rounded-xl px-3 py-2 gap-2">
+                        <span class="text-xs font-semibold text-slate-200 flex items-center gap-2 flex-1 min-w-0">
+                            <span class="w-5 h-5 rounded-full bg-pink-500/20 text-pink-400 text-[10px] flex items-center justify-center font-mono flex-shrink-0">${idx + 1}</span>
+                            <span class="truncate">${exObj.name}</span>
+                        </span>
+
+                        ${isWOD1 ? `
+                            <div class="flex items-center gap-1.5 w-28 flex-shrink-0">
+                                <input type="number" min="1" value="${exObj.reps || 10}" data-index="${idx}" class="wod-ex-reps-input w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs text-center font-bold text-white focus:ring-1 focus:ring-pink-500">
+                                <span class="text-[10px] text-slate-400 font-medium">${unit}</span>
+                            </div>
+                        ` : ''}
+
+                        <div class="flex items-center gap-1 flex-shrink-0">
+                            <button class="btn-move-ex-up p-1 text-slate-400 hover:text-white" data-index="${idx}"><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
+                            <button class="btn-move-ex-down p-1 text-slate-400 hover:text-white" data-index="${idx}"><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+                            <button class="btn-remove-ex p-1 text-slate-400 hover:text-rose-400 ml-1" data-index="${idx}"><i class="fa-solid fa-xmark text-xs"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]);
+        }
+
+        function setupEventListeners() {
+            document.getElementById('app-title').addEventListener('click', () => showView('library'));
+            btnNavLibrary.addEventListener('click', () => showView('library'));
+            btnNavExercises.addEventListener('click', () => showView('exercises'));
+
+            const exerciseForm = document.getElementById('exercise-form');
+            exerciseForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const editId = document.getElementById('exercise-edit-id').value;
+                const name = document.getElementById('exercise-name-input').value.trim();
+                const unit = document.getElementById('exercise-unit-input').value;
+
+                if (!name) return;
+
+                if (editId) {
+                    const ex = exercisesDatabase.find(item => item.id === editId);
+                    if (ex) {
+                        ex.name = name;
+                        ex.unit = unit;
+                    }
+                } else {
+                    const newId = 'ex_' + Date.now();
+                    exercisesDatabase.push({ id: newId, name, unit });
+                }
+
+                saveExercisesDatabase();
+                sortExercisesDatabase();
+                renderExercisesList();
+
+                document.getElementById('exercise-edit-id').value = '';
+                document.getElementById('exercise-name-input').value = '';
+                document.getElementById('exercise-unit-input').value = 'réps';
+                document.getElementById('exercise-form-title').innerHTML = `<i class="fa-solid fa-plus-circle text-pink-400"></i> Ajouter un nouvel exercice`;
+            });
+
+            document.getElementById('exercises-list-container').addEventListener('click', async (e) => {
+                const btn = e.target.closest('button');
+                if (!btn) return;
+
+                const id = btn.dataset.id;
+                const ex = exercisesDatabase.find(item => item.id === id);
+                if (!ex) return;
+
+                if (btn.classList.contains('btn-edit-exercise')) {
+                    document.getElementById('exercise-edit-id').value = ex.id;
+                    document.getElementById('exercise-name-input').value = ex.name;
+                    document.getElementById('exercise-unit-input').value = ex.unit;
+                    document.getElementById('exercise-form-title').innerHTML = `<i class="fa-solid fa-pen text-pink-400"></i> Modifier "${escapeHtml(ex.name)}"`;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (btn.classList.contains('btn-delete-exercise')) {
+                    if (await customConfirm('Supprimer', `Supprimer l'exercice "${ex.name}" ?`)) {
+                        exercisesDatabase = exercisesDatabase.filter(item => item.id !== id);
+                        saveExercisesDatabase();
+                        renderExercisesList();
+                    }
+                }
+            });
+
+            document.getElementById('btn-reset-exercises').addEventListener('click', async () => {
+                if (await customConfirm('Réinitialiser', 'Restaurer la liste des exercices par défaut ?')) {
+                    exercisesDatabase = JSON.parse(JSON.stringify(DEFAULT_EXERCISES));
+                    saveExercisesDatabase();
+                    sortExercisesDatabase();
+                    renderExercisesList();
+                }
+            });
+            
+            document.querySelectorAll('.btn-back-to-library').forEach(b => {
+                b.addEventListener('click', () => showView('library'));
+            });
+
+            document.getElementById('btn-create-course').addEventListener('click', () => {
+                const newId = 'session_' + Date.now();
+                sessionsList.push({ id: newId, category: 'course', title: 'Nouvelle séance Course', blocks: [] });
+                saveLibrary();
+                openEditor(newId);
+            });
+
+            document.getElementById('btn-create-renfo').addEventListener('click', () => {
+                const newId = 'session_' + Date.now();
+                sessionsList.push({
+                    id: newId,
+                    category: 'renfo',
+                    title: 'Nouvelle séance Renfo',
+                    format: 'circuit',
+                    params: { series: 3, work_sec: 40, rest_sec: 20 },
+                    exercises: []
+                });
+                saveLibrary();
+                openEditor(newId);
+            });
+
+            cardsGrid.addEventListener('click', async (e) => {
+                const btn = e.target.closest('button');
+                if (!btn) return;
+
+                if (btn.classList.contains('btn-move-session-up') || btn.classList.contains('btn-move-session-down')) {
+                    const idx = parseInt(btn.dataset.index, 10);
+                    if (btn.classList.contains('btn-move-session-up') && idx > 0) {
+                        [sessionsList[idx - 1], sessionsList[idx]] = [sessionsList[idx], sessionsList[idx - 1]];
+                    } else if (btn.classList.contains('btn-move-session-down') && idx < sessionsList.length - 1) {
+                        [sessionsList[idx + 1], sessionsList[idx]] = [sessionsList[idx], sessionsList[idx + 1]];
+                    }
+                    saveLibrary();
+                    renderLibrary();
+                    return;
+                }
+
+                const id = btn.dataset.id;
+                if (btn.classList.contains('btn-edit-card')) {
+                    openEditor(id);
+                } else if (btn.classList.contains('btn-clone-card')) {
+                    const orig = sessionsList.find(s => s.id === id);
+                    if (orig) {
+                        const clone = JSON.parse(JSON.stringify(orig));
+                        clone.id = 'session_' + Date.now();
+                        clone.title += ' (Copie)';
+                        sessionsList.push(clone);
+                        saveLibrary();
+                        renderLibrary();
+                    }
+                } else if (btn.classList.contains('btn-delete-card')) {
+                    if (await customConfirm('Supprimer', 'Voulez-vous supprimer cette séance ?')) {
+                        sessionsList = sessionsList.filter(s => s.id !== id);
+                        saveLibrary();
+                        renderLibrary();
+                    }
+                } else if (btn.classList.contains('btn-start-card')) {
+                    currentSessionId = id;
+                    startTimerProcess();
+                }
+            });
+
+            document.getElementById('course-title-input').addEventListener('input', (e) => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (s) { s.title = e.target.value || 'Course sans titre'; saveLibrary(); }
+            });
+            document.getElementById('renfo-title-input').addEventListener('input', (e) => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (s) { s.title = e.target.value || 'Renfo sans titre'; saveLibrary(); }
+            });
+
+            document.getElementById('add-course-block-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const session = sessionsList.find(s => s.id === currentSessionId);
+                if (!session) return;
+
+                const type = document.getElementById('course-type').value;
+                const val = parseInt(document.getElementById('course-val').value, 10);
+                const unit = document.getElementById('course-unit').value;
+
+                session.blocks.push({ type, val, unit });
+                saveLibrary();
+                renderCourseBlocks();
+            });
+
+            document.getElementById('course-blocks-container').addEventListener('click', (e) => {
+                const session = sessionsList.find(s => s.id === currentSessionId);
+                if (!session) return;
+                const target = e.target.closest('button, input');
+                if (!target) return;
+
+                const index = parseInt(target.dataset.index, 10);
+                if (target.classList.contains('course-block-checkbox')) {
+                    if (target.checked) selectedCourseIndices.add(index);
+                    else selectedCourseIndices.delete(index);
+                    document.getElementById('selected-count').textContent = `${selectedCourseIndices.size} bloc(s)`;
+                } else if (target.classList.contains('btn-delete-course-block')) {
+                    session.blocks.splice(index, 1);
+                    selectedCourseIndices.clear();
+                    saveLibrary();
+                    renderCourseBlocks();
+                } else if (target.classList.contains('btn-move-course-up') && index > 0) {
+                    [session.blocks[index - 1], session.blocks[index]] = [session.blocks[index], session.blocks[index - 1]];
+                    selectedCourseIndices.clear();
+                    saveLibrary();
+                    renderCourseBlocks();
+                } else if (target.classList.contains('btn-move-course-down') && index < session.blocks.length - 1) {
+                    [session.blocks[index + 1], session.blocks[index]] = [session.blocks[index], session.blocks[index - 1]];
+                    selectedCourseIndices.clear();
+                    saveLibrary();
+                    renderCourseBlocks();
+                }
+            });
+
+            document.getElementById('btn-select-all').addEventListener('click', () => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s) return;
+                selectedCourseIndices = new Set(s.blocks.map((_, i) => i));
+                renderCourseBlocks();
+            });
+            document.getElementById('btn-deselect-all').addEventListener('click', () => {
+                selectedCourseIndices.clear();
+                renderCourseBlocks();
+            });
+            document.getElementById('btn-duplicate-blocks').addEventListener('click', () => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || selectedCourseIndices.size === 0) return;
+                const factor = parseInt(document.getElementById('repeat-count').value, 10) || 2;
+                const selected = s.blocks.filter((_, i) => selectedCourseIndices.has(i));
+                for (let i = 0; i < factor - 1; i++) {
+                    selected.forEach(b => s.blocks.push({ ...b }));
+                }
+                selectedCourseIndices.clear();
+                saveLibrary();
+                renderCourseBlocks();
+            });
+            document.getElementById('btn-delete-selected-blocks').addEventListener('click', async () => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || selectedCourseIndices.size === 0) return;
+                if (await customConfirm('Supprimer', 'Supprimer les blocs sélectionnés ?')) {
+                    s.blocks = s.blocks.filter((_, i) => !selectedCourseIndices.has(i));
+                    selectedCourseIndices.clear();
+                    saveLibrary();
+                    renderCourseBlocks();
+                }
+            });
+
+            document.getElementById('renfo-format-select').addEventListener('change', (e) => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (s) {
+                    s.format = e.target.value;
+                    s.params = {};
+                    renderRenfoParamsFields();
+                    renderExerciseSection();
+                    saveLibrary();
+                }
+            });
+
+            document.getElementById('renfo-params-container').addEventListener('input', (e) => {
+                const input = e.target.closest('.renfo-param-input');
+                if (!input) return;
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (s) {
+                    s.params[input.dataset.paramId] = parseInt(input.value, 10) || 0;
+                    if ((s.format === 'tabata' || s.format === 'emom') && (input.dataset.paramId === 'count' || input.dataset.paramId === 'duration_min')) {
+                        renderExerciseSection();
+                    }
+                    saveLibrary();
+                }
+            });
+
+            document.getElementById('tabata-blocks-container').addEventListener('change', (e) => {
+                const select = e.target.closest('.tabata-ex-select');
+                if (!select) return;
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || !s.tabataBlocks) return;
+
+                const blockIdx = parseInt(select.dataset.blockIdx, 10);
+                const exNum = select.dataset.exNum;
+
+                if (exNum === '1') s.tabataBlocks[blockIdx].ex1 = select.value;
+                if (exNum === '2') s.tabataBlocks[blockIdx].ex2 = select.value;
+
+                saveLibrary();
+            });
+
+            document.getElementById('emom-blocks-container').addEventListener('change', (e) => {
+                const select = e.target.closest('.emom-ex-select');
+                if (!select) return;
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || !s.emomBlocks) return;
+
+                const bIdx = parseInt(select.dataset.blockIdx, 10);
+                const mIdx = parseInt(select.dataset.minIdx, 10);
+
+                s.emomBlocks[bIdx][mIdx].ex = select.value;
+                
+                const unitLabel = select.parentElement.querySelector('.emom-unit-label');
+                if (unitLabel) {
+                    unitLabel.textContent = getExerciseUnit(select.value);
+                }
+
+                saveLibrary();
+            });
+
+            document.getElementById('emom-blocks-container').addEventListener('input', (e) => {
+                const input = e.target.closest('.emom-reps-input');
+                if (!input) return;
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || !s.emomBlocks) return;
+
+                const bIdx = parseInt(input.dataset.blockIdx, 10);
+                const mIdx = parseInt(input.dataset.minIdx, 10);
+
+                s.emomBlocks[bIdx][mIdx].reps = parseInt(input.value, 10) || 1;
+                saveLibrary();
+            });
+
+            document.getElementById('btn-add-exercise').addEventListener('click', () => {
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s) return;
+                const exName = document.getElementById('exercise-picker').value;
+                if (!s.exercises) s.exercises = [];
+                s.exercises.push({ name: exName, reps: 10 });
+                saveLibrary();
+                renderSelectedExercises();
+            });
+
+            document.getElementById('selected-exercises-list').addEventListener('input', (e) => {
+                const input = e.target.closest('.wod-ex-reps-input');
+                if (!input) return;
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || !s.exercises) return;
+
+                const idx = parseInt(input.dataset.index, 10);
+                s.exercises[idx].reps = parseInt(input.value, 10) || 1;
+                saveLibrary();
+            });
+
+            document.getElementById('selected-exercises-list').addEventListener('click', (e) => {
+                const btn = e.target.closest('button');
+                if (!btn) return;
+                const s = sessionsList.find(x => x.id === currentSessionId);
+                if (!s || !s.exercises) return;
+                const idx = parseInt(btn.dataset.index, 10);
+
+                if (btn.classList.contains('btn-remove-ex')) {
+                    s.exercises.splice(idx, 1);
+                } else if (btn.classList.contains('btn-move-ex-up') && idx > 0) {
+                    [s.exercises[idx - 1], s.exercises[idx]] = [s.exercises[idx], s.exercises[idx - 1]];
+                } else if (btn.classList.contains('btn-move-ex-down') && idx < s.exercises.length - 1) {
+                    [s.exercises[idx + 1], s.exercises[idx]] = [s.exercises[idx], s.exercises[idx - 1]];
+                }
+                saveLibrary();
+                renderSelectedExercises();
+            });
+
+            document.querySelectorAll('.btn-save-session').forEach(b => {
+                b.addEventListener('click', () => {
+                    saveLibrary();
+                    showView('library');
+                });
+            });
+
+            document.getElementById('btn-start-course-session').addEventListener('click', () => {
+                saveLibrary();
+                startTimerProcess();
+            });
+
+            // EXPORT GLOBALE (SÉANCES + BANQUE D'EXERCICES)
+            document.getElementById('btn-export-json').addEventListener('click', () => {
+                const exportData = {
+                    sessions: sessionsList,
+                    exercises: exercisesDatabase
+                };
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+                const anchor = document.createElement('a');
+                anchor.setAttribute("href", dataStr);
+                anchor.setAttribute("download", `fit_timer_export_${new Date().toISOString().slice(0,10)}.json`);
+                document.body.appendChild(anchor);
+                anchor.click();
+                anchor.remove();
+            });
+
+            document.getElementById('btn-import-trigger').addEventListener('click', () => {
+                document.getElementById('file-import-json').click();
+            });
+
+            // IMPORT GLOBALE
+            document.getElementById('file-import-json').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (evt) => {
+                    try {
+                        const imported = JSON.parse(evt.target.result);
+                        let importedSessionsCount = 0;
+                        let importedExercisesCount = 0;
+
+                        if (Array.isArray(imported)) {
+                            // Format legacy (tableau de séances)
+                            imported.forEach(s => {
+                                s.id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+                                sessionsList.push(s);
+                                importedSessionsCount++;
+                            });
+                        } else if (imported && typeof imported === 'object') {
+                            // Format complet { sessions: [...], exercises: [...] }
+                            if (Array.isArray(imported.sessions)) {
+                                imported.sessions.forEach(s => {
+                                    s.id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+                                    sessionsList.push(s);
+                                    importedSessionsCount++;
+                                });
+                            }
+                            if (Array.isArray(imported.exercises)) {
+                                imported.exercises.forEach(ex => {
+                                    if (!exercisesDatabase.some(e => e.name.toLowerCase() === ex.name.toLowerCase())) {
+                                        ex.id = 'ex_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+                                        exercisesDatabase.push(ex);
+                                        importedExercisesCount++;
+                                    }
+                                });
+                                saveExercisesDatabase();
+                                sortExercisesDatabase();
+                            }
+                        }
+                        saveLibrary();
+                        renderLibrary();
+                        await customAlert(
+                            'Succès', 
+                            `Données importées avec succès ! (${importedSessionsCount} séance(s), ${importedExercisesCount} nouveau(x) exercice(s))`, 
+                            'fa-circle-check', 
+                            'text-emerald-400'
+                        );
+                    } catch (err) {
+                        customAlert('Erreur', 'Fichier JSON d\'import invalide ou corrompu.', 'fa-triangle-exclamation', 'text-rose-400');
+                    }
+                    e.target.value = '';
+                };
+                reader.readAsText(file);
+            });
+
+            document.getElementById('btn-pause-timer').addEventListener('click', togglePauseTimer);
+            document.getElementById('btn-skip-timer').addEventListener('click', skipTimerStep);
+            document.getElementById('btn-stop-timer').addEventListener('click', confirmStopTimer);
+        }
+
+        async function confirmStopTimer() {
+            const confirmed = await customConfirm(
+                "Arrêter la séance ?",
+                "Êtes-vous sûr de vouloir stopper définitivement la séance en cours ?"
+            );
+
+            if (confirmed) {
+                stopTimer();
+            }
+        }
+
+        function stopTimer() {
+            if (timerState.intervalId) clearInterval(timerState.intervalId);
+            timerState.active = false;
+            showView('library');
+        }
+
+        function startTimerProcess() {
+            const session = sessionsList.find(s => s.id === currentSessionId);
+            if (!session) return;
+
+            showView('timer');
+
+            let sequence = [];
+            if (session.category === 'course') {
+                session.blocks.forEach(b => {
+                    let textVal = `${b.val} ${b.unit}`;
+                    let durationSec = b.unit === 'min' ? b.val * 60 : (b.unit === 'sec' ? b.val : 15);
+                    sequence.push({
+                        label: COURSE_EFFORT_CONFIG[b.type].label,
+                        detail: textVal,
+                        duration: durationSec,
+                        colorClass: COURSE_EFFORT_CONFIG[b.type].text
+                    });
+                });
+            } else {
+                const p = session.params || {};
+
+                if (session.format === 'tabata') {
+                    const n = p.count || 1;
+                    const blocks = session.tabataBlocks || [];
+                    for (let t = 0; t < n; t++) {
+                        const tb = blocks[t] || { ex1: 'Exercice 1', ex2: 'Exercice 2' };
+                        const totalSec = (p.duration_min || 4) * 60;
+                        let elapsed = 0;
+                        let toggle = 0;
+
+                        while (elapsed < totalSec) {
+                            const currentEx = (toggle % 2 === 0) ? tb.ex1 : tb.ex2;
+                            sequence.push({
+                                label: `Tabata #${t + 1} - ${currentEx}`,
+                                detail: `${p.work_sec || 20}s Effort`,
+                                duration: p.work_sec || 20,
+                                colorClass: 'text-rose-500'
+                            });
+                            elapsed += (p.work_sec || 20);
+
+                            if (p.rest_sec > 0 && elapsed < totalSec) {
+                                sequence.push({
+                                    label: `Repos Tabata #${t + 1}`,
+                                    detail: `${p.rest_sec}s Repos`,
+                                    duration: p.rest_sec,
+                                    colorClass: 'text-emerald-400'
+                                });
+                                elapsed += p.rest_sec;
+                            }
+                            toggle++;
+                        }
+                    }
+                } else if (session.format === 'emom') {
+                    const n = p.count || 1;
+                    const m = p.duration_min || 10;
+                    const blocks = session.emomBlocks || [];
+
+                    for (let b = 0; b < n; b++) {
+                        const blockItems = blocks[b] || [];
+                        for (let min = 0; min < m; min++) {
+                            const defaultExName = exercisesDatabase[0] ? exercisesDatabase[0].name : 'Pompe';
+                            const item = blockItems[min] || { ex: defaultExName, reps: 10 };
+                            const unit = getExerciseUnit(item.ex);
+                            sequence.push({
+                                label: `EMOM #${b + 1} - Min ${min + 1} : ${item.ex}`,
+                                detail: `Objectif: ${item.reps} ${unit}`,
+                                duration: 60,
+                                colorClass: 'text-purple-400'
+                            });
+                        }
+                    }
+                } else if (session.format === 'circuit') {
+                    const exList = (session.exercises && session.exercises.length > 0) ? session.exercises : [{ name: 'Exercice Libre' }];
+                    for (let s = 1; s <= (p.series || 1); s++) {
+                        exList.forEach((exObj) => {
+                            const name = exObj.name || exObj;
+                            sequence.push({ label: `Série ${s} - ${name}`, detail: `${p.work_sec || 30}s Effort`, duration: p.work_sec || 30, colorClass: 'text-pink-400' });
+                            if (p.rest_sec > 0) sequence.push({ label: `Repos`, detail: `${p.rest_sec}s Repos`, duration: p.rest_sec, colorClass: 'text-emerald-400' });
+                        });
+                    }
+                } else if (session.format === 'wod1') {
+                    const exList = (session.exercises && session.exercises.length > 0) ? session.exercises : [{ name: 'Exercice Libre', reps: 10 }];
+                    const totalMin = p.duration_min || 15;
+                    for (let m = 1; m <= totalMin; m++) {
+                        const exObj = exList[(m - 1) % exList.length];
+                        const name = exObj.name || exObj;
+                        const reps = exObj.reps || 10;
+                        const unit = getExerciseUnit(name);
+                        sequence.push({
+                            label: `Minute ${m} - ${name}`,
+                            detail: `Objectif: ${reps} ${unit}`,
+                            duration: 60,
+                            colorClass: 'text-purple-400'
+                        });
+                    }
+                } else if (session.format === 'wod2') {
+                    const exList = (session.exercises && session.exercises.length > 0) ? session.exercises : [{ name: 'Exercice Libre' }];
+                    const series = p.series || 4;
+                    const minsPerSerie = p.series_min || 3;
+                    const totalMin = series * minsPerSerie;
+
+                    for (let m = 1; m <= totalMin; m++) {
+                        const currentSerie = Math.floor((m - 1) / minsPerSerie) + 1;
+                        const exObj = exList[(m - 1) % exList.length];
+                        const name = exObj.name || exObj;
+                        sequence.push({
+                            label: `Série ${currentSerie} (Min ${m}) - ${name}`,
+                            detail: `Objectif: Max de réps`,
+                            duration: 60,
+                            colorClass: 'text-pink-400'
+                        });
+                    }
+                }
+            }
+
+            if (timerState.intervalId) clearInterval(timerState.intervalId);
+
+            timerState = {
+                active: true,
+                paused: false,
+                currentStepIndex: -1,
+                timeRemaining: 10,
+                totalStepDuration: 10,
+                sequence: sequence,
+                intervalId: null
+            };
+
+            updateTimerUI();
+            timerState.intervalId = setInterval(tick, 1000);
+        }
+
+        function nextStep() {
+            timerState.currentStepIndex++;
+
+            if (timerState.currentStepIndex >= timerState.sequence.length) {
+                completeTimer();
+                return;
+            }
+
+            const step = timerState.sequence[timerState.currentStepIndex];
+            timerState.timeRemaining = step.duration;
+            timerState.totalStepDuration = step.duration;
+            updateTimerUI();
+        }
+
+        function tick() {
+            if (timerState.paused) return;
+
+            if (timerState.timeRemaining <= 3 && timerState.timeRemaining > 0) {
+                playBeep(600, 'sine', 0.1);
+            }
+
+            if (timerState.timeRemaining > 0) {
+                timerState.timeRemaining--;
+                updateTimerUI();
+            } else {
+                playBeep(900, 'sine', 0.4);
+                nextStep();
+            }
+        }
+
+        function updateTimerUI() {
+            const session = sessionsList.find(s => s.id === currentSessionId);
+            const display = document.getElementById('timer-display');
+            const label = document.getElementById('timer-label');
+            const statusBadge = document.getElementById('timer-status-badge');
+            const stepIndexEl = document.getElementById('timer-step-index');
+            const nextStepEl = document.getElementById('timer-next-step');
+            const progressBar = document.getElementById('timer-progress');
+
+            display.textContent = formatTime(timerState.timeRemaining);
+
+            if (timerState.currentStepIndex === -1) {
+                statusBadge.textContent = 'PRÉPARATION';
+                label.textContent = session ? session.title : 'Départ imminent';
+                stepIndexEl.textContent = 'Préparation';
+                if (timerState.sequence.length > 0) {
+                    nextStepEl.textContent = `Suivant: ${timerState.sequence[0].label}`;
+                }
+            } else {
+                const step = timerState.sequence[timerState.currentStepIndex];
+                statusBadge.textContent = step.detail || 'EFFORT';
+                label.textContent = step.label;
+                stepIndexEl.textContent = `Étape ${timerState.currentStepIndex + 1} / ${timerState.sequence.length}`;
+
+                if (timerState.currentStepIndex + 1 < timerState.sequence.length) {
+                    nextStepEl.textContent = `Suivant: ${timerState.sequence[timerState.currentStepIndex + 1].label}`;
+                } else {
+                    nextStepEl.textContent = 'Dernière étape !';
+                }
+            }
+
+            const pct = ((timerState.totalStepDuration - timerState.timeRemaining) / timerState.totalStepDuration) * 100;
+            progressBar.style.width = `${pct}%`;
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function togglePauseTimer() {
+            timerState.paused = !timerState.paused;
+            document.getElementById('btn-pause-timer').innerHTML = timerState.paused ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-pause"></i>';
+        }
+
+        async function skipTimerStep() {
+            const confirmed = await customConfirm(
+                "Passer l'étape ?",
+                "Voulez-vous vraiment passer à l'étape suivante ?"
+            );
+
+            if (!confirmed) return;
+
+            playBeep(900, 'sine', 0.2);
+            nextStep();
+        }
+        
+        async function completeTimer() {
+            if (timerState.intervalId) clearInterval(timerState.intervalId);
+            await customAlert('Entraînement Terminé !', 'Bravo, vous avez terminé l\'intégralité de la séance !', 'fa-trophy', 'text-emerald-400');
+            stopTimer();
+        }
+    </script>
 </body>
 </html>
