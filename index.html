@@ -500,7 +500,7 @@
             const gain = audioCtx.createGain();
             osc.type = type;
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(2.0, audioCtx.currentTime);
+            gain.gain.setValueAtTime(1.0, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -508,10 +508,10 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             loadExercisesDatabase();
             initExercisePicker();
-            loadLibrary();
+            await loadLibrary();
             renderLibrary();
             setupEventListeners();
         });
@@ -526,36 +526,96 @@
             localStorage.setItem('fitsessions_library_v3', JSON.stringify(sessionsList));
         }
 
-        function loadLibrary() {
+        function applyImportData(data) {
+            let importedSessionsCount = 0;
+            let updatedSessionsCount = 0;
+            let importedExercisesCount = 0;
+
+            let sessionsToProcess = [];
+            let exercisesToProcess = [];
+
+            if (Array.isArray(data)) {
+                sessionsToProcess = data;
+            } else if (data && typeof data === 'object') {
+                if (Array.isArray(data.sessions)) sessionsToProcess = data.sessions;
+                if (Array.isArray(data.exercises)) exercisesToProcess = data.exercises;
+            }
+
+            sessionsToProcess.forEach(s => {
+                const existingIndex = sessionsList.findIndex(item => item.title.trim().toLowerCase() === s.title.trim().toLowerCase());
+                if (existingIndex !== -1) {
+                    sessionsList[existingIndex] = {
+                        ...s,
+                        id: sessionsList[existingIndex].id
+                    };
+                    updatedSessionsCount++;
+                } else {
+                    const newSession = {
+                        ...s,
+                        id: 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4)
+                    };
+                    sessionsList.push(newSession);
+                    importedSessionsCount++;
+                }
+            });
+
+            exercisesToProcess.forEach(ex => {
+                if (!exercisesDatabase.some(e => e.name.toLowerCase() === ex.name.toLowerCase())) {
+                    ex.id = 'ex_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+                    exercisesDatabase.push(ex);
+                    importedExercisesCount++;
+                }
+            });
+
+            if (exercisesToProcess.length > 0) {
+                saveExercisesDatabase();
+                sortExercisesDatabase();
+            }
+
+            saveLibrary();
+            return { importedSessionsCount, updatedSessionsCount, importedExercisesCount };
+        }
+
+        async function loadLibrary() {
             const cached = localStorage.getItem('fitsessions_library_v3');
             if (cached) {
                 try { sessionsList = JSON.parse(cached); } catch (e) { sessionsList = []; }
             }
             if (!sessionsList || sessionsList.length === 0) {
-                sessionsList = [
-                    {
-                        id: 'demo_course_1',
-                        category: 'course',
-                        title: 'Sprint & VMA 100m',
-                        blocks: [
-                            { type: 'echauffement', val: 5, unit: 'min' },
-                            { type: 'sprint', val: 100, unit: 'm' },
-                            { type: 'repos', val: 30, unit: 'sec' }
-                        ]
-                    },
-                    {
-                        id: 'demo_renfo_1',
-                        category: 'renfo',
-                        title: '2 Tabatas Explosifs',
-                        format: 'tabata',
-                        params: { count: 2, duration_min: 4, work_sec: 20, rest_sec: 10 },
-                        tabataBlocks: [
-                            { ex1: 'Pompe', ex2: 'Squat jump' },
-                            { ex1: 'Gainage droit', ex2: 'Mountain climber' }
-                        ]
+                try {
+                    const response = await fetch('./default-sport.json');
+                    if (response.ok) {
+                        const defaultData = await response.json();
+                        applyImportData(defaultData);
+                    } else {
+                        throw new Error('Non trouvé');
                     }
-                ];
-                saveLibrary();
+                } catch (e) {
+                    sessionsList = [
+                        {
+                            id: 'demo_course_1',
+                            category: 'course',
+                            title: 'Sprint & VMA 100m',
+                            blocks: [
+                                { type: 'echauffement', val: 5, unit: 'min' },
+                                { type: 'sprint', val: 100, unit: 'm' },
+                                { type: 'repos', val: 30, unit: 'sec' }
+                            ]
+                        },
+                        {
+                            id: 'demo_renfo_1',
+                            category: 'renfo',
+                            title: '2 Tabatas Explosifs',
+                            format: 'tabata',
+                            params: { count: 2, duration_min: 4, work_sec: 20, rest_sec: 10 },
+                            tabataBlocks: [
+                                { ex1: 'Pompe', ex2: 'Squat jump' },
+                                { ex1: 'Gainage droit', ex2: 'Mountain climber' }
+                            ]
+                        }
+                    ];
+                    saveLibrary();
+                }
             }
         }
 
@@ -1302,7 +1362,7 @@
                 startTimerProcess();
             });
 
-            // EXPORT GLOBALE (SÉANCES + BANQUE D'EXERCICES)
+            // EXPORT GLOBAL (SÉANCES + BANQUE D'EXERCICES)
             document.getElementById('btn-export-json').addEventListener('click', () => {
                 const exportData = {
                     sessions: sessionsList,
@@ -1321,7 +1381,7 @@
                 document.getElementById('file-import-json').click();
             });
 
-            // IMPORT GLOBALE
+            // IMPORT GLOBAL AVEC ÉCRASEMENT SUR DUPLICAT DE NOM
             document.getElementById('file-import-json').addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -1329,42 +1389,11 @@
                 reader.onload = async (evt) => {
                     try {
                         const imported = JSON.parse(evt.target.result);
-                        let importedSessionsCount = 0;
-                        let importedExercisesCount = 0;
-
-                        if (Array.isArray(imported)) {
-                            // Format legacy (tableau de séances)
-                            imported.forEach(s => {
-                                s.id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
-                                sessionsList.push(s);
-                                importedSessionsCount++;
-                            });
-                        } else if (imported && typeof imported === 'object') {
-                            // Format complet { sessions: [...], exercises: [...] }
-                            if (Array.isArray(imported.sessions)) {
-                                imported.sessions.forEach(s => {
-                                    s.id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
-                                    sessionsList.push(s);
-                                    importedSessionsCount++;
-                                });
-                            }
-                            if (Array.isArray(imported.exercises)) {
-                                imported.exercises.forEach(ex => {
-                                    if (!exercisesDatabase.some(e => e.name.toLowerCase() === ex.name.toLowerCase())) {
-                                        ex.id = 'ex_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
-                                        exercisesDatabase.push(ex);
-                                        importedExercisesCount++;
-                                    }
-                                });
-                                saveExercisesDatabase();
-                                sortExercisesDatabase();
-                            }
-                        }
-                        saveLibrary();
+                        const { importedSessionsCount, updatedSessionsCount, importedExercisesCount } = applyImportData(imported);
                         renderLibrary();
                         await customAlert(
                             'Succès', 
-                            `Données importées avec succès ! (${importedSessionsCount} séance(s), ${importedExercisesCount} nouveau(x) exercice(s))`, 
+                            `Données importées avec succès ! (${importedSessionsCount} nouvelle(s) séance(s), ${updatedSessionsCount} séance(s) mise(s) à jour, ${importedExercisesCount} nouveau(x) exercice(s))`, 
                             'fa-circle-check', 
                             'text-emerald-400'
                         );
