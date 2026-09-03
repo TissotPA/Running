@@ -391,10 +391,10 @@
 
         const COURSE_EFFORT_CONFIG = {
             echauffement: { label: 'Échauffement', color: 'bg-amber-500', text: 'text-amber-500', icon: 'fa-fire' },
-            sprint: { label: 'Sprint', color: 'bg-rose-500', text: 'text-rose-500', icon: 'fa-bolt' },
-            vma: { label: 'VMA', color: 'bg-purple-500', text: 'text-purple-500', icon: 'fa-person-running' },
-            ralenti: { label: 'Ralenti', color: 'bg-blue-500', text: 'text-blue-500', icon: 'fa-person-walking' },
-            repos: { label: 'Repos', color: 'bg-emerald-500', text: 'text-emerald-500', icon: 'fa-heart-pulse' }
+            sprint: { label: 'Sprint', color: 'bg-red-500', text: 'text-red-500', icon: 'fa-bolt' },
+            vma: { label: 'VMA', color: 'bg-orange-500', text: 'text-orange-500', icon: 'fa-person-running' },
+            ralenti: { label: 'Ralenti', color: 'bg-green-500', text: 'text-green-500', icon: 'fa-person-walking' },
+            repos: { label: 'Repos', color: 'bg-blue-500', text: 'text-blue-500', icon: 'fa-heart-pulse' }
         };
 
         const RENFO_FORMATS = {
@@ -1442,7 +1442,8 @@
                         label: COURSE_EFFORT_CONFIG[b.type].label,
                         detail: textVal,
                         duration: durationSec,
-                        colorClass: COURSE_EFFORT_CONFIG[b.type].text
+                        colorClass: COURSE_EFFORT_CONFIG[b.type].text,
+                        cardColorClass: COURSE_EFFORT_CONFIG[b.type].color
                     });
                 });
             } else {
@@ -1596,12 +1597,16 @@
             const stepIndexEl = document.getElementById('timer-step-index');
             const nextStepEl = document.getElementById('timer-next-step');
             const progressBar = document.getElementById('timer-progress');
+            const timerCard = document.getElementById('timer-card');
 
             display.textContent = formatTime(timerState.timeRemaining);
 
             if (timerState.currentStepIndex === -1) {
                 statusBadge.textContent = 'PRÉPARATION';
                 label.textContent = session ? session.title : 'Départ imminent';
+                display.className = 'text-7xl sm:text-8xl font-black font-mono tracking-tighter text-indigo-400 drop-shadow-md';
+                progressBar.className = 'bg-indigo-500 h-full rounded-full transition-all duration-300';
+                timerCard.classList.remove('border-red-500', 'border-orange-500', 'border-green-500', 'border-blue-500');
                 stepIndexEl.textContent = 'Préparation';
                 if (timerState.sequence.length > 0) {
                     nextStepEl.textContent = `Suivant: ${timerState.sequence[0].label}`;
@@ -1610,6 +1615,12 @@
                 const step = timerState.sequence[timerState.currentStepIndex];
                 statusBadge.textContent = step.detail || 'EFFORT';
                 label.textContent = step.label;
+                display.className = `text-7xl sm:text-8xl font-black font-mono tracking-tighter ${step.colorClass} drop-shadow-md`;
+                progressBar.className = `${step.cardColorClass || 'bg-indigo-500'} h-full rounded-full transition-all duration-300`;
+                timerCard.classList.remove('border-red-500', 'border-orange-500', 'border-green-500', 'border-blue-500');
+                if (step.cardColorClass) {
+                    timerCard.classList.add(step.cardColorClass.replace('bg-', 'border-'));
+                }
                 stepIndexEl.textContent = `Étape ${timerState.currentStepIndex + 1} / ${timerState.sequence.length}`;
 
                 if (timerState.currentStepIndex + 1 < timerState.sequence.length) {
