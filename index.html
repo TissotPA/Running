@@ -267,6 +267,9 @@
                     <span id="timer-next-step">Suivant: --</span>
                 </div>
 
+                <div id="timer-effort-progress" class="text-xs text-slate-400 mb-4 font-mono"></div>
+                <div id="timer-remaining-steps" class="text-xs text-slate-400 mb-4"></div>
+
                 <div class="mb-4">
                     <span id="timer-status-badge" class="text-sm font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-slate-700/50 border border-slate-600/50 inline-block">
                         Préparation
@@ -390,11 +393,11 @@
         }
 
         const COURSE_EFFORT_CONFIG = {
-            echauffement: { label: 'Échauffement', color: 'bg-amber-500', text: 'text-amber-500', icon: 'fa-fire' },
-            sprint: { label: 'Sprint', color: 'bg-red-500', text: 'text-red-500', icon: 'fa-bolt' },
-            vma: { label: 'VMA', color: 'bg-orange-500', text: 'text-orange-500', icon: 'fa-person-running' },
-            ralenti: { label: 'Ralenti', color: 'bg-green-500', text: 'text-green-500', icon: 'fa-person-walking' },
-            repos: { label: 'Repos', color: 'bg-blue-500', text: 'text-blue-500', icon: 'fa-heart-pulse' }
+            echauffement: { label: 'Échauffement', progressLabel: 'Échauffements', color: 'bg-amber-500', text: 'text-amber-500', icon: 'fa-fire' },
+            sprint: { label: 'Sprint', progressLabel: 'Sprints', color: 'bg-red-500', text: 'text-red-500', icon: 'fa-bolt' },
+            vma: { label: 'VMA', progressLabel: 'VMA', color: 'bg-orange-500', text: 'text-orange-500', icon: 'fa-person-running' },
+            ralenti: { label: 'Ralenti', progressLabel: 'Ralenti', color: 'bg-green-500', text: 'text-green-500', icon: 'fa-person-walking' },
+            repos: { label: 'Repos', progressLabel: 'Repos', color: 'bg-blue-500', text: 'text-blue-500', icon: 'fa-heart-pulse' }
         };
 
         const RENFO_FORMATS = {
@@ -1443,7 +1446,8 @@
                         detail: textVal,
                         duration: durationSec,
                         colorClass: COURSE_EFFORT_CONFIG[b.type].text,
-                        cardColorClass: COURSE_EFFORT_CONFIG[b.type].color
+                        cardColorClass: COURSE_EFFORT_CONFIG[b.type].color,
+                        effortType: b.type
                     });
                 });
             } else {
@@ -1598,8 +1602,32 @@
             const nextStepEl = document.getElementById('timer-next-step');
             const progressBar = document.getElementById('timer-progress');
             const timerCard = document.getElementById('timer-card');
+            const effortProgressEl = document.getElementById('timer-effort-progress');
+            const remainingStepsEl = document.getElementById('timer-remaining-steps');
 
             display.textContent = formatTime(timerState.timeRemaining);
+
+            const remainingSteps = Math.max(0, timerState.sequence.length - Math.max(0, timerState.currentStepIndex + 1));
+            remainingStepsEl.textContent = remainingSteps > 0
+                ? `${remainingSteps} étape${remainingSteps > 1 ? 's' : ''} restante${remainingSteps > 1 ? 's' : ''}`
+                : 'Aucune étape restante';
+
+            if (session && session.category === 'course') {
+                const effortProgress = Object.keys(COURSE_EFFORT_CONFIG)
+                    .map(type => {
+                        const total = timerState.sequence.filter(step => step.effortType === type).length;
+                        if (total === 0) return null;
+                        const completed = timerState.sequence
+                            .slice(0, Math.max(0, timerState.currentStepIndex + 1))
+                            .filter(step => step.effortType === type).length;
+                        const label = COURSE_EFFORT_CONFIG[type].progressLabel;
+                        return `${completed}/${total} ${label}`;
+                    })
+                    .filter(Boolean);
+                effortProgressEl.textContent = effortProgress.join(' · ');
+            } else {
+                effortProgressEl.textContent = '';
+            }
 
             if (timerState.currentStepIndex === -1) {
                 statusBadge.textContent = 'PRÉPARATION';
